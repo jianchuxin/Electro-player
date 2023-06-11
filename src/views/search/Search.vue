@@ -1,5 +1,5 @@
 <template>
-  <div>Music</div>
+  <div>search</div>
 </template>
 
 <script setup></script>

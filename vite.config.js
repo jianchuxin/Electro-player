@@ -18,4 +18,12 @@ export default defineConfig({
       "views": path.resolve(__dirnameNew, "src/views"),
     },
   },
+  css: {
+    preprocessorOptions: {
+      less: {
+        additionalData: `@import "@/styles/var.less";
+                         @import "@/styles/mixin.less";`,
+      },
+    },
+  },
 });

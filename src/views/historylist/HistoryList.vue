@@ -1,5 +1,5 @@
 <template>
-  <div>Music</div>
+  <div>historyList</div>
 </template>
 
 <script setup></script>

@@ -7,7 +7,7 @@
       "assets/*": ["src/assets/*"],
       "base/*": ["src/base/*"],
       "components/*": ["src/components/*"],
-      "pages/*": ["src/pages/*"]
+      "views/*": ["src/views/*"]
     }
   }
 }
