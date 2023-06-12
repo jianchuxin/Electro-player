@@ -1,7 +1,41 @@
 <template>
-  <div>菜单按钮</div>
+  <div class="music-btn">
+    <RouterLink to="/music/playlist">正在播放</RouterLink>
+    <RouterLink to="/music/toplist">推荐</RouterLink>
+    <RouterLink to="/music/search">搜索</RouterLink>
+    <RouterLink to="/music/userlist">我的歌单</RouterLink>
+    <span class="show-960">歌词</span>
+    <RouterLink to="/music/historylist">我听过的</RouterLink>
+  </div>
 </template>
 
 <script setup></script>
 
-<style lang="scss" scoped></style>
+<style lang="less" scoped>
+.music-btn {
+  width: 100%;
+  height: 60px;
+  display: flex;
+  gap: 8px;
+  a,
+  span {
+    display: inline-block;
+    height: 40px;
+    box-sizing: border-box;
+    padding: 0 23px;
+    border: 1px solid @btn_color;
+    color: @btn_color;
+    border-radius: @btn_border_radius;
+    font-size: 14px;
+    line-height: 40px;
+    overflow: hidden;
+    cursor: pointer;
+    &:hover,
+    &:active {
+      border-color: @btn_color_active;
+      color: @btn_color_active;
+    }
+  }
+  //   @media;
+}
+</style>
