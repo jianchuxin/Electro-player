@@ -1,11 +1,11 @@
 <script setup>
 import { RouterView } from "vue-router";
+import MmHeader from "components/mmheader/MmHeader.vue";
 </script>
 
 <template>
-  <header></header>
+  <MmHeader />
   <RouterView />
-
   <!-- 播放器 -->
   <audio src=""></audio>
 </template>
@@ -16,7 +16,7 @@ import { RouterView } from "vue-router";
   width: 100%;
   height: 100%;
   color: @text_color;
-  font-size: 1.2rem;
+  font-size: @font_size_medium;
   audio {
     position: fixed;
   }
