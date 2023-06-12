@@ -17,7 +17,13 @@
     </div>
 
     <!-- 下方播放器 -->
-    <div class="music-bar" :class="{ disabled: true }">播放器</div>
+    <div class="music-bar" :class="{ disabled: true }">
+      <div class="music-bar-btns">
+        <!-- icon -->
+        <MmIcon type="bofang" :size="24"></MmIcon>
+        <i class="icon-font icon-bofang"></i>
+      </div>
+    </div>
 
     <!-- 遮罩-背景滤镜 -->
     <div class="mmPlayer-bg"></div>

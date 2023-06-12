@@ -67,4 +67,7 @@
     .no-wrap();
   }
 }
+
+// 歌词部分样式
+// .music-lyric{}
 </style>
