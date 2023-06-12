@@ -17,11 +17,46 @@
     </div>
 
     <!-- 下方播放器 -->
-    <div class="music-bar" :class="{ disabled: true }">
+    <div class="music-bar" :class="{ disabled: false }">
       <div class="music-bar-btns">
         <!-- icon -->
-        <MmIcon type="bofang" :size="24"></MmIcon>
-        <i class="icon-font icon-bofang"></i>
+        <MmIcon
+          type="shangyishouge"
+          :size="24"
+          class="pointer"
+          title="上一曲 Ctrl + Left"
+        ></MmIcon>
+        <div class="control-play pointer" title="播放暂停 Ctrl + Space">
+          <MmIcon type="bofang" :size="24"></MmIcon>
+        </div>
+        <MmIcon
+          type="xiayishou"
+          :size="24"
+          class="pointer"
+          title="下一曲 Ctrl + Right"
+        ></MmIcon>
+      </div>
+      <div class="music-music">
+        <div class="music-bar-info">
+          <template v-if="false">歌手/歌名</template>
+          <template v-else>欢迎使用mmPlayer在线音乐播放器</template>
+        </div>
+        <!-- 时间显示 -->
+        <div v-if="false">currentTime</div>
+        <!-- 播放进度条 -->
+        <MmProgress />
+      </div>
+
+      <div class="options">
+        <!-- 播放模式 -->
+        <MmIcon type="shunxubofang" title="顺序播放" :size="30"></MmIcon>
+        <!-- 评论 -->
+        <MmIcon type="pinglun" title="评论" :size="30"></MmIcon>
+
+        <!-- 音量控制 -->
+        <div class="music-bar-volume" title="音量加减 [Ctrl + Up / Down]">
+          <volume></volume>
+        </div>
       </div>
     </div>
 
@@ -34,6 +69,8 @@
 <script setup>
 import Lyric from "components/lyric/Lyric.vue";
 import MusicBtn from "components/musicbtn/MusicBtn.vue";
+import MmProgress from "base/mmprogress/MmProgress.vue";
+import Volume from "components/volume/Volume.vue";
 </script>
 
 <style lang="less" scoped>
@@ -71,9 +108,8 @@ import MusicBtn from "components/musicbtn/MusicBtn.vue";
 
   // 底部mmPlayer-bar
   .music-bar {
-    background-color: pink;
+    background-color: #111;
     display: flex;
-    justify-content: space-between;
     align-items: center;
     width: 100%;
     padding: 15px 0;
@@ -99,6 +135,39 @@ import MusicBtn from "components/musicbtn/MusicBtn.vue";
         background-color: rgba(255, 255, 255, 0.3);
       }
     }
+
+    .music-music {
+      position: relative;
+      width: 100%;
+      flex: 1;
+      box-sizing: border-box;
+      padding-left: 40px;
+      font-size: @font_size_small;
+      color: @text_color_active;
+      .music-bar-info {
+        height: 15px;
+        padding-right: 80px;
+        line-height: 15px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+
+        // display: -webkit-box;
+        // -webkit-line-clamp: 1;
+        // -webkit-box-orient: vertical;
+      }
+      .music-bar-time {
+        position: absolute;
+        top: 0;
+        right: 5px;
+      }
+    }
+
+    .options {
+      .flex-center;
+      gap: 20px;
+    }
+
+    // volume 音量条样式
 
     // 详细配置
   }
