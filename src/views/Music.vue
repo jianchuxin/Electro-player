@@ -74,6 +74,11 @@ import Volume from "components/volume/Volume.vue";
 </script>
 
 <style lang="less" scoped>
+.router-view {
+  flex: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
 .music {
   background-color: #333;
   padding: 75px 25px 25px 25px;

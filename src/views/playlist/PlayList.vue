@@ -1,7 +1,11 @@
 <template>
-  <div>playlist</div>
+  <div class="playlist">
+    <MusicList>歌曲列表</MusicList>
+  </div>
 </template>
 
-<script setup></script>
+<script setup>
+import MusicList from "components/musiclist/MusicList.vue";
+</script>
 
 <style lang="scss" scoped></style>

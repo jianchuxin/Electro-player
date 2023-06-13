@@ -9,6 +9,7 @@ const router = createRouter({
     {
       path: "/music",
       component: () => import("views/Music.vue"),
+      redirect: "music/playlist",
       children: [
         {
           path: "/music/playlist", //正在播放列表
