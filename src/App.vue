@@ -1,6 +1,20 @@
 <script setup>
 import { RouterView } from "vue-router";
 import MmHeader from "components/mmheader/MmHeader.vue";
+import { onMounted } from "vue";
+import { getPlayListById } from "./apis/musiclist";
+import { usePlayListStore } from "./stores/playlist";
+
+const usePlayList = usePlayListStore();
+
+const initPlayList = async (id = 3778678) => {
+  const playList = await getPlayListById(id);
+  usePlayList.setPlayList(playList);
+};
+
+onMounted(() => {
+  initPlayList();
+});
 </script>
 
 <template>

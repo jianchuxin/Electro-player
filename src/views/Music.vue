@@ -5,9 +5,11 @@
       <!-- 左方歌曲列表显示 -->
       <div class="music-left flex-col">
         <MusicBtn />
-        <keep-alive>
-          <RouterView class="router-view" />
-        </keep-alive>
+        <RouterView class="router-view" v-slot="{ Component }">
+          <keep-alive>
+            <component :is="Component" />
+          </keep-alive>
+        </RouterView>
       </div>
       <!-- 右方歌词显示 -->
       <div class="music-right">
