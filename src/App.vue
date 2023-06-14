@@ -9,7 +9,8 @@ const usePlayList = usePlayListStore();
 
 const initPlayList = async (id = 3778678) => {
   const playList = await getPlayListById(id);
-  usePlayList.setPlayList(playList);
+  const list = playList.tracks.slice(0, 100);
+  usePlayList.setPlayList(list);
 };
 
 onMounted(() => {
