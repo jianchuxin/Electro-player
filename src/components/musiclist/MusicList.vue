@@ -59,8 +59,6 @@ const listScroll = () => {
 
 <template>
   <div class="music-list flex-col">
-    <p>{{ list.length }}</p>
-    <button @click="console.log(list)">click</button>
     <template v-if="list.length > 0">
       <div class="list-item list-header">
         <span class="list-name">歌曲</span>
@@ -181,19 +179,6 @@ const listScroll = () => {
   .list-time {
     display: block;
     width: 60px;
-  }
-}
-
-.list-btn {
-  .flex-center;
-  height: 50px;
-  span {
-    padding: 5px 20px;
-    cursor: pointer;
-    user-select: none;
-    &:hover {
-      color: @text_color_active;
-    }
   }
 }
 </style>

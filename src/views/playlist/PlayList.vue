@@ -21,3 +21,18 @@ const showDialog = () => {
     <!-- mm-dialog -->
   </div>
 </template>
+
+<style scoped lang="less">
+.list-btn {
+  .flex-center;
+  height: 50px;
+  span {
+    padding: 5px 20px;
+    cursor: pointer;
+    user-select: none;
+    &:hover {
+      color: @text_color_active;
+    }
+  }
+}
+</style>
