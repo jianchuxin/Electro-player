@@ -109,6 +109,7 @@ const listScroll = () => {
 <style lang="less" scoped>
 .music-list {
   height: 100%;
+  min-height: 0;
 }
 
 .list-header {

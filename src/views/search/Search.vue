@@ -1,11 +1,15 @@
 <script setup>
-import { ref, onMounted } from "vue";
 import MusicList from "@/components/musiclist/MusicList.vue";
+import MmLoading from "@/base/mmloading/MmLoading.vue";
+import { ref, onMounted } from "vue";
 import { getSearchHot, getSearchList } from "apis/musiclist";
 import { formatSongs } from "@/utils/song";
+import { useLoading } from "@/composables/loading"; // 使用组合式函数代替mixins
+const searchValue = ref("");
 const searchHotWords = ref([]);
 const searchList = ref([]);
-const searchValue = ref("");
+
+const { isLoading, hideLoad } = useLoading();
 
 // 获取热搜词语
 const InitSearchHotWords = async () => {
@@ -28,10 +32,12 @@ const onSearch = async () => {
     alert("搜索内容不能为空~");
   }
   // loading....
+  isLoading.value = true;
   const res = await getSearchList(searchValue.value);
   searchList.value = formatSongs(res.result.songs);
-  console.log(searchList.value);
-  //loading end!
+  // console.log(searchList.value);
+  // 调用组合式函数--> @/composables/load.js
+  hideLoad();
 };
 
 const selectItem = () => {
@@ -45,7 +51,7 @@ const pullUpLoad = () => {
 
 <template>
   <div class="search flex-col">
-    <!-- mm-loading -->
+    <MmLoading :show="isLoading" />
     <div class="search-head">
       <span
         v-for="(item, index) in searchHotWords"
