@@ -8,6 +8,7 @@ import { useLoading } from "@/composables/loading"; // 使用组合式函数代�
 const searchValue = ref("");
 const searchHotWords = ref([]);
 const searchList = ref([]);
+const page = ref(0);
 
 const { isLoading, hideLoad } = useLoading();
 
@@ -32,21 +33,31 @@ const onSearch = async () => {
   searchValue.value = searchValue.value.trim();
   if (searchValue.value === "clickHot") {
     alert("搜索内容不能为空~");
+    return;
   }
   // loading....
   isLoading.value = true;
   const res = await getSearchList(searchValue.value);
-  searchList.value = formatSongs(res.result.songs);
+  const result = res.result;
+  searchList.value = formatSongs(result.songs);
   // loading end
   // 调用组合式函数--> @/composables/load.js
   hideLoad();
 };
 
-const selectItem = () => {
-  //
+// 滚动加载-添加新的数据
+const pullUpLoad = async () => {
+  page.value++;
+  const res = await getSearchList(searchValue.value, page.value);
+  const result = res.result;
+  console.log(result);
+  if (!result.songs) {
+    alert("没有更多歌曲啦!");
+    return;
+  }
+  searchList.value = [...searchList.value, ...formatSongs(result.songs)];
 };
-
-const pullUpLoad = () => {
+const selectItem = () => {
   //
 };
 </script>
@@ -71,9 +82,9 @@ const pullUpLoad = () => {
     </div>
     <MusicList
       :list="searchList"
-      list-type="pullup"
+      list-type="pullUp"
       @select="selectItem"
-      @pullUp="pullUpLoad"
+      @pullUpLoad="pullUpLoad"
     />
   </div>
 </template>

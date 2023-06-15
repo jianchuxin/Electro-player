@@ -1,7 +1,9 @@
 <script setup>
-import { computed } from "vue";
+import { ref, computed, watch } from "vue";
 import { formatSecond } from "@/utils/util";
-
+// 触发滚动加载的阈值
+const THRESHOLD = 100;
+const emit = defineEmits(["pullUpLoad"]);
 const props = defineProps({
   // 歌曲数据
   list: {
@@ -12,7 +14,7 @@ const props = defineProps({
    * 列表类型
    * album：显示专辑栏目（默认）
    * duration：显示时长栏目
-   * pullup：开启无限加载--往下滑到底加载新的歌曲
+   * pullUp：开启无限加载--往下滑到底加载新的歌曲
    **/
   listType: {
     type: String,
@@ -50,8 +52,37 @@ const deleteItem = () => {
   //
 };
 
-const listScroll = () => {
-  //
+watch(
+  () => props.list,
+  (newList, oldList) => {
+    console.log("list change");
+    console.log(oldList.length);
+    console.log(newList.length);
+    if (props.listType !== "pullUp") {
+      return;
+    }
+    if (newList.length !== oldList.length) {
+      lockUp.value = false;
+    } else if (newList[newList.length - 1].id !== oldList[oldList.length - 1]) {
+      lockUp.value = false;
+    }
+  }
+);
+
+// 滚动加载，pullup类型
+const lockUp = ref(true); // 是否锁定滚动加载事件
+const listScroll = (e) => {
+  if (props.listType !== "pullUp" || lockUp.value) {
+    return;
+  }
+  const scrollTop = e.target.scrollTop;
+  const { scrollHeight, offsetHeight } = e.target;
+  console.log(scrollHeight, scrollTop, offsetHeight);
+  const heightLeft = scrollHeight - scrollTop - offsetHeight; // 剩余内容高度
+  if (heightLeft <= THRESHOLD) {
+    lockUp.value = true; // 锁定滚动加载事件
+    emit("pullUpLoad"); // 触发滚动加载事件
+  }
 };
 </script>
 
