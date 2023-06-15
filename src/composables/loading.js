@@ -4,7 +4,7 @@
 import { ref } from "vue";
 export const useLoading = () => {
   let timer = null;
-  const isLoading = ref(false);
+  const isLoading = ref(true);
 
   const hideLoad = () => {
     timer = setTimeout(() => {

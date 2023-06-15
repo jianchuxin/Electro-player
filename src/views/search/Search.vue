@@ -19,11 +19,13 @@ const InitSearchHotWords = async () => {
 
 onMounted(() => {
   InitSearchHotWords();
+  isLoading.value = false;
 });
 
 // 点击热搜词语
-const clickHot = () => {
-  //
+const clickHot = (keywords) => {
+  searchValue.value = keywords;
+  onSearch();
 };
 
 const onSearch = async () => {
@@ -35,7 +37,7 @@ const onSearch = async () => {
   isLoading.value = true;
   const res = await getSearchList(searchValue.value);
   searchList.value = formatSongs(res.result.songs);
-  // console.log(searchList.value);
+  // loading end
   // 调用组合式函数--> @/composables/load.js
   hideLoad();
 };
@@ -56,7 +58,7 @@ const pullUpLoad = () => {
       <span
         v-for="(item, index) in searchHotWords"
         :key="index"
-        @click="clickHot"
+        @click="clickHot(item.first)"
         >{{ item.first }}</span
       >
       <input

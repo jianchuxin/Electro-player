@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted } from "vue";
+import { computed } from "vue";
 import { formatSecond } from "@/utils/util";
 
 const props = defineProps({
@@ -19,9 +19,7 @@ const props = defineProps({
     default: "album",
   },
 });
-onMounted(() => {
-  console.log(props.list);
-});
+
 // 是否显示时间
 const isDuration = computed(() => {
   return props.listType === "duration";
