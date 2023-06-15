@@ -28,11 +28,26 @@ export const getPlayListById = async (id) => {
 };
 
 // 获取歌曲详情
-
 const getSongDetail = (ids) => {
   return request.get("/song/detail", {
     params: {
       ids,
+    },
+  });
+};
+
+// 热门搜索
+export const getSearchHot = () => {
+  return request.get("/search/hot");
+};
+// 搜索歌曲
+
+export const getSearchList = (keywords, page = 0, limit = 30) => {
+  return request.get("/search", {
+    params: {
+      offset: page * limit,
+      limit: limit,
+      keywords,
     },
   });
 };

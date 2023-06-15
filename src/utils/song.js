@@ -11,18 +11,19 @@ export class Song {
 }
 
 const getSingers = (singers) => {
-  return singers.reduce((acc, item) => {
-    return acc + "/" + item.name;
-  }, "");
+  const nameList = singers.map((item) => item.name);
+  return nameList.reduce((acc, item) => {
+    return acc + "/" + item;
+  });
 };
 
 const createSong = (music) => {
-  const album = music.al || {};
-  const duration = music.dt;
+  const album = music.al || music.album || {};
+  const duration = music.dt || music.duration;
   return new Song({
     id: music.id,
     name: music.name,
-    singer: getSingers(music.ar),
+    singer: getSingers(music.ar || music.artists),
     album: album.name,
     image: album.picUrl,
     duration: duration / 1000,
