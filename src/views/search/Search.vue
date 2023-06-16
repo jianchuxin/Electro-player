@@ -29,14 +29,22 @@ const clickHot = (keywords) => {
   onSearch();
 };
 
+// 引用子组件实例，使用{scrollToTop}方法
+const musicList = ref(null);
+
 const onSearch = async () => {
   searchValue.value = searchValue.value.trim();
+  // console.log(searchValue.value);
   if (searchValue.value === "clickHot") {
     alert("搜索内容不能为空~");
     return;
   }
   // loading....
+  page.value = 0;
   isLoading.value = true;
+  if (searchList.value.length > 0) {
+    musicList.value.scrollToTop();
+  }
   const res = await getSearchList(searchValue.value);
   const result = res.result;
   searchList.value = formatSongs(result.songs);
@@ -50,7 +58,7 @@ const pullUpLoad = async () => {
   page.value++;
   const res = await getSearchList(searchValue.value, page.value);
   const result = res.result;
-  console.log(result);
+  // console.log(result);
   if (!result.songs) {
     alert("没有更多歌曲啦!");
     return;
@@ -81,6 +89,7 @@ const selectItem = () => {
       />
     </div>
     <MusicList
+      ref="musicList"
       :list="searchList"
       list-type="pullUp"
       @select="selectItem"

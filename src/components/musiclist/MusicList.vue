@@ -52,15 +52,24 @@ const deleteItem = () => {
   //
 };
 
+// 切换搜索时，列表滑动到顶部，暴露给父组件
+const listContent = ref(null);
+const scrollToTop = () => {
+  listContent.value.scrollTop = 0;
+};
+
+defineExpose({ scrollToTop });
+
 watch(
   () => props.list,
   (newList, oldList) => {
-    console.log("list change");
-    console.log(oldList.length);
-    console.log(newList.length);
+    // console.log("list change");
+    // console.log(oldList.length);
+    // console.log(newList.length);
     if (props.listType !== "pullUp") {
       return;
     }
+    // lockUp.value = false;
     if (newList.length !== oldList.length) {
       lockUp.value = false;
     } else if (newList[newList.length - 1].id !== oldList[oldList.length - 1]) {
@@ -77,7 +86,7 @@ const listScroll = (e) => {
   }
   const scrollTop = e.target.scrollTop;
   const { scrollHeight, offsetHeight } = e.target;
-  console.log(scrollHeight, scrollTop, offsetHeight);
+  // console.log(scrollHeight, scrollTop, offsetHeight);
   const heightLeft = scrollHeight - scrollTop - offsetHeight; // 剩余内容高度
   if (heightLeft <= THRESHOLD) {
     lockUp.value = true; // 锁定滚动加载事件
