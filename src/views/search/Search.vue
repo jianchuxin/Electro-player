@@ -47,6 +47,7 @@ const onSearch = async () => {
   }
   const res = await getSearchList(searchValue.value);
   const result = res.result;
+  // console.log(result);
   searchList.value = formatSongs(result.songs);
   // loading end
   // 调用组合式函数--> @/composables/load.js

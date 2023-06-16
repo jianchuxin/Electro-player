@@ -43,8 +43,9 @@ const getFormatTime = (seconds) => {
 };
 
 // 双击选择特定歌曲播放
-const selectItem = () => {
-  //
+const selectItem = (item, index) => {
+  console.log(item);
+  console.log(index);
 };
 
 // 删除特定歌曲
@@ -110,30 +111,30 @@ const listScroll = (e) => {
           :key="item.id"
           class="list-item"
           :class="{ isPlaying: isPlaying }"
-          @dblclick="selectItem"
+          @dblclick="selectItem(item, index)"
         >
-          <span class="list-num" v-text="index + 1"></span>
+          <div class="list-num" v-text="index + 1"></div>
           <div class="list-name">
-            <span>{{ item.name }}</span>
-            <div class="list-menu">
-              <MmIcon
-                :type="getStateType"
-                :size="24"
-                class="hover"
-                @click.stop="selectItem"
-              />
-            </div>
+            <span class="list-name-text">{{ item.name }}</span>
+            <MmIcon
+              :type="getStateType"
+              :size="32"
+              class="hover list-menu-icon"
+              @click.stop="selectItem(item, index)"
+            />
           </div>
-          <span class="list-artist">{{ item.singer }}</span>
-          <span v-if="isDuration" class="list-time">
-            {{ getFormatTime(item.duration % 3600) }}
+          <div class="list-artist">{{ item.singer }}</div>
+          <div v-if="isDuration" class="list-time">
+            <span class="list-time-format">{{
+              getFormatTime(item.duration % 3600)
+            }}</span>
             <MmIcon
               type="shanchu"
-              :size="24"
+              :size="32"
               class="hover list-menu-icon-del"
               @click.stop="deleteItem"
             />
-          </span>
+          </div>
           <span v-else class="list-album">{{ item.album }}</span>
         </div>
         <slot name="listBtn"></slot>
@@ -186,38 +187,62 @@ const listScroll = (e) => {
     flex: 1;
     box-sizing: border-box;
 
-    & > span {
+    .list-name-text {
       text-overflow: ellipsis;
       overflow: hidden;
     }
 
-    // small {
-    //   margin-left: 5px;
-    //   font-size: 12px;
-    //   color: rgba(2552, 255, 255, 0.5);
-    // }
-
-    .list-menu {
-      //   display: none;
+    .list-menu-icon {
+      display: none;
       position: absolute;
-      top: 0;
+      top: 50%;
       right: 10px;
-      height: 50px;
-      .flex-center;
+      transform: translateY(-50%);
     }
   }
 
   .list-artist,
   .list-album {
     display: block;
-    width: 300px;
+    width: 150px;
     .no-wrap();
     // @media
+  }
+  .list-artist {
+    width: 250px;
   }
 
   .list-time {
     display: block;
     width: 60px;
+    position: relative;
+
+    .list-menu-icon-del {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+    }
+  }
+}
+
+.list-item:hover {
+  .list-name {
+    padding-right: 80px;
+
+    .list-menu-icon {
+      display: block;
+    }
+  }
+
+  .list-time {
+    .list-time-format {
+      font-size: 0;
+    }
+    .list-menu-icon-del {
+      display: block;
+    }
   }
 }
 </style>
