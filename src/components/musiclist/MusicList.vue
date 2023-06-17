@@ -1,9 +1,14 @@
 <script setup>
 import { ref, computed, watch } from "vue";
 import { formatSecond } from "@/utils/util";
+import { usePlayListStore } from "@/stores/playlist";
+import { storeToRefs } from "pinia";
+const playListStore = usePlayListStore();
+const { setPlaying } = playListStore;
+const { currentMusic, isPlaying } = storeToRefs(playListStore);
 // 触发滚动加载的阈值
 const THRESHOLD = 100;
-const emit = defineEmits(["pullUpLoad"]);
+const emit = defineEmits(["pullUpLoad", "select", "del"]);
 const props = defineProps({
   // 歌曲数据
   list: {
@@ -27,11 +32,6 @@ const isDuration = computed(() => {
   return props.listType === "duration";
 });
 
-// 是否正在播放
-const isPlaying = computed(() => {
-  return true;
-});
-
 // 根据播放 or 暂停状态 设定图标
 const getStateType = computed(() => {
   return "bofang";
@@ -44,13 +44,18 @@ const getFormatTime = (seconds) => {
 
 // 双击选择特定歌曲播放
 const selectItem = (item, index) => {
-  console.log(item);
-  console.log(index);
+  // 双击当前播放歌曲，播放/暂停
+  if (currentMusic.value.id && item.id === currentMusic.value.id) {
+    setPlaying(!isPlaying.value);
+    return;
+  }
+  // 切换当前播放音乐
+  emit("select", item, index);
 };
 
 // 删除特定歌曲
 const deleteItem = () => {
-  //
+  console.log("delete!");
 };
 
 // 切换搜索时，列表滑动到顶部，暴露给父组件
@@ -110,7 +115,7 @@ const listScroll = (e) => {
           v-for="(item, index) in list"
           :key="item.id"
           class="list-item"
-          :class="{ isPlaying: isPlaying }"
+          :class="{ on: isPlaying }"
           @dblclick="selectItem(item, index)"
         >
           <div class="list-num" v-text="index + 1"></div>
@@ -133,6 +138,7 @@ const listScroll = (e) => {
               :size="32"
               class="hover list-menu-icon-del"
               @click.stop="deleteItem"
+              @dblclick.stop=""
             />
           </div>
           <span v-else class="list-album">{{ item.album }}</span>

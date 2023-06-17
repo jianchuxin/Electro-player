@@ -1,7 +1,7 @@
 <script setup>
 import { RouterView } from "vue-router";
 import MmHeader from "components/mmheader/MmHeader.vue";
-import { onMounted } from "vue";
+import { ref, onMounted, nextTick } from "vue";
 import { getPlayListById } from "./apis/musiclist";
 import { usePlayListStore } from "./stores/playlist";
 
@@ -13,8 +13,16 @@ const initPlayList = async (id = 3778678) => {
   usePlayList.setPlayList(list);
 };
 
+const mmPlayer = ref(null);
 onMounted(() => {
+  // 初始化播放列表
   initPlayList();
+
+  // 设置audio元素
+  nextTick(() => {
+    // console.log(mmPlayer);
+    usePlayList.setAudioEle(mmPlayer.value);
+  });
 });
 </script>
 
@@ -22,7 +30,7 @@ onMounted(() => {
   <MmHeader />
   <RouterView />
   <!-- 播放器 -->
-  <audio src=""></audio>
+  <audio ref="mmPlayer"></audio>
 </template>
 
 <style lang="less">

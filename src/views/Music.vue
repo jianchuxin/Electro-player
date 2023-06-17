@@ -19,7 +19,10 @@
     </div>
 
     <!-- 下方播放器 -->
-    <div class="music-bar" :class="{ disabled: false }">
+    <div
+      class="music-bar"
+      :class="{ disabled: !musicReady || !currentMusic.id }"
+    >
       <div class="music-bar-btns">
         <!-- icon -->
         <MmIcon
@@ -57,7 +60,7 @@
 
         <!-- 音量控制 -->
         <div class="music-bar-volume" title="音量加减 [Ctrl + Up / Down]">
-          <volume></volume>
+          <Volume></Volume>
         </div>
       </div>
     </div>
@@ -73,6 +76,52 @@ import Lyric from "components/lyric/Lyric.vue";
 import MusicBtn from "components/musicbtn/MusicBtn.vue";
 import MmProgress from "base/mmprogress/MmProgress.vue";
 import Volume from "components/volume/Volume.vue";
+import { ref, computed, watch } from "vue";
+import { usePlayListStore } from "@/stores/playlist";
+import { storeToRefs } from "pinia";
+
+const playListStore = usePlayListStore();
+// const { currentMusic } = playListStore;
+const { currentMusic, isPlaying, audioEle } = storeToRefs(playListStore);
+const musicReady = ref(false);
+// const currentTime = ref(0);
+// const currentProgress = ref(0);
+// 歌词显示
+// const isMute = ref(false);
+// const volume = ref(0.8);
+
+// 歌曲封面图片300X300
+// const picUrl = computed(() => {
+//   return currentMusic.value.id && currentMusic.value.image
+//     ? `url(${currentMusic.value.image})?param=300y300`
+//     : "";
+// });
+// 播放进度百分比
+// const percentMusic = computed(() => {
+//   const duration = currentMusic.value.duration;
+//   return currentTime.value && duration ? currentTime.value / duration : 0;
+// });
+
+watch(currentMusic, (newMusic, oldMusic) => {
+  console.log("歌曲切换");
+  if (!newMusic.id) {
+    return;
+  }
+  if (newMusic.id === oldMusic.id) {
+    return;
+  }
+  playListStore.audioEle.src = newMusic.url;
+  playListStore.audioEle.play();
+});
+
+watch(isPlaying, (newPlaying) => {
+  if (newPlaying) {
+    audioEle.value.play();
+  } else {
+    audioEle.value.pause();
+  }
+  musicReady.value = true;
+});
 </script>
 
 <style lang="less" scoped>

@@ -12,7 +12,7 @@ export const getPlayListById = async (id) => {
     // 过滤完整歌单
     if (trackIds.length === tracks.length) {
       playList.tracks = formatSongs(playList.tracks);
-      console.log(playList);
+      // console.log(playList);
     } else {
       // 限制歌单详情最大 500
       const ids = trackIds
