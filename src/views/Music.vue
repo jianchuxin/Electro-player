@@ -1,3 +1,59 @@
+<script setup>
+import Lyric from "components/lyric/Lyric.vue";
+import MusicBtn from "components/musicbtn/MusicBtn.vue";
+import MmProgress from "base/mmprogress/MmProgress.vue";
+import Volume from "components/volume/Volume.vue";
+import { ref, watch } from "vue";
+import { usePlayListStore } from "@/stores/playlist";
+import { storeToRefs } from "pinia";
+import { formatSecond } from "@/utils/util";
+
+const playListStore = usePlayListStore();
+// const { currentMusic } = playListStore;
+const { currentMusic, isPlaying, audioEle } = storeToRefs(playListStore);
+const musicReady = ref(false);
+const currentTime = ref(0);
+const currentProgress = ref(0);
+// 歌词显示
+const isMute = ref(false);
+const volume = ref(0.8);
+
+// 歌曲封面图片300X300
+const picUrl = computed(() => {
+  return currentMusic.value.id && currentMusic.value.image
+    ? `url(${currentMusic.value.image})?param=300y300`
+    : "";
+});
+// 播放进度百分比
+const percentMusic = computed(() => {
+  const duration = currentMusic.value.duration;
+  return currentTime.value && duration ? currentTime.value / duration : 0;
+});
+
+// 切换歌曲
+watch(currentMusic, (newMusic, oldMusic) => {
+  console.log("歌曲切换");
+  if (!newMusic.id) {
+    return;
+  }
+  if (newMusic.id === oldMusic.id) {
+    return;
+  }
+  playListStore.audioEle.src = newMusic.url;
+  playListStore.audioEle.play();
+});
+// 播放 or 暂停
+watch(isPlaying, (newPlaying) => {
+  if (newPlaying) {
+    audioEle.value.play();
+  } else {
+    audioEle.value.pause();
+  }
+  musicReady.value = true;
+});
+//
+</script>
+
 <template>
   <div class="music flex-col">
     <!-- 上方主体内容 -->
@@ -43,13 +99,25 @@
       </div>
       <div class="music-music">
         <div class="music-bar-info">
-          <template v-if="false">歌手/歌名</template>
+          <template v-if="currentMusic && currentMusic.id">
+            {{ currentMusic.name }}
+            <span>-{{ currentMusic.singer }}</span>
+          </template>
           <template v-else>欢迎使用mmPlayer在线音乐播放器</template>
         </div>
-        <!-- 时间显示 -->
-        <div v-if="false">currentTime</div>
+        <div v-if="currentMusic.id" class="music-bar-time">
+          {{ formatSecond(currentTime) }}/{{
+            formatSecond(currentMusic.duration % 3600)
+          }}
+        </div>
         <!-- 播放进度条 -->
-        <MmProgress />
+        <MmProgress
+          class="music-progress"
+          :percent="percentMusic"
+          :percent-load="currentProgress"
+          @percentChange="progressMusic"
+          @percentChangeEnd="progressMusicEnd"
+        />
       </div>
 
       <div class="options">
@@ -70,59 +138,6 @@
     <div class="mmPlayer-mask"></div>
   </div>
 </template>
-
-<script setup>
-import Lyric from "components/lyric/Lyric.vue";
-import MusicBtn from "components/musicbtn/MusicBtn.vue";
-import MmProgress from "base/mmprogress/MmProgress.vue";
-import Volume from "components/volume/Volume.vue";
-import { ref, computed, watch } from "vue";
-import { usePlayListStore } from "@/stores/playlist";
-import { storeToRefs } from "pinia";
-
-const playListStore = usePlayListStore();
-// const { currentMusic } = playListStore;
-const { currentMusic, isPlaying, audioEle } = storeToRefs(playListStore);
-const musicReady = ref(false);
-// const currentTime = ref(0);
-// const currentProgress = ref(0);
-// 歌词显示
-// const isMute = ref(false);
-// const volume = ref(0.8);
-
-// 歌曲封面图片300X300
-// const picUrl = computed(() => {
-//   return currentMusic.value.id && currentMusic.value.image
-//     ? `url(${currentMusic.value.image})?param=300y300`
-//     : "";
-// });
-// 播放进度百分比
-// const percentMusic = computed(() => {
-//   const duration = currentMusic.value.duration;
-//   return currentTime.value && duration ? currentTime.value / duration : 0;
-// });
-
-watch(currentMusic, (newMusic, oldMusic) => {
-  console.log("歌曲切换");
-  if (!newMusic.id) {
-    return;
-  }
-  if (newMusic.id === oldMusic.id) {
-    return;
-  }
-  playListStore.audioEle.src = newMusic.url;
-  playListStore.audioEle.play();
-});
-
-watch(isPlaying, (newPlaying) => {
-  if (newPlaying) {
-    audioEle.value.play();
-  } else {
-    audioEle.value.pause();
-  }
-  musicReady.value = true;
-});
-</script>
 
 <style lang="less" scoped>
 .router-view {
