@@ -3,17 +3,26 @@ import Lyric from "components/lyric/Lyric.vue";
 import MusicBtn from "components/musicbtn/MusicBtn.vue";
 import MmProgress from "base/mmprogress/MmProgress.vue";
 import Volume from "components/volume/Volume.vue";
-import { ref, watch } from "vue";
+import { ref, watch, computed, onMounted } from "vue";
 import { usePlayListStore } from "@/stores/playlist";
 import { storeToRefs } from "pinia";
-import { formatSecond } from "@/utils/util";
+import { formatSecond, silencePromise } from "@/utils/util";
+import { useMmPlayer } from "@/composables/player";
 
 const playListStore = usePlayListStore();
-// const { currentMusic } = playListStore;
-const { currentMusic, isPlaying, audioEle } = storeToRefs(playListStore);
-const musicReady = ref(false);
-const currentTime = ref(0);
-const currentProgress = ref(0);
+const { setCurrentIndex, setPlaying } = playListStore;
+const { currentMusic, currentIndex, isPlaying, audioEle, playList, mode } =
+  storeToRefs(playListStore);
+const { musicReady, currentTime, currentProgress, initAudio } = useMmPlayer();
+
+onMounted(() => {
+  initAudio();
+});
+
+// 与播放器相关
+// const musicReady = ref(false);
+// const currentTime = ref(0);
+// const currentProgress = ref(0);
 // 歌词显示
 const isMute = ref(false);
 const volume = ref(0.8);
@@ -39,19 +48,101 @@ watch(currentMusic, (newMusic, oldMusic) => {
   if (newMusic.id === oldMusic.id) {
     return;
   }
-  playListStore.audioEle.src = newMusic.url;
-  playListStore.audioEle.play();
+  audioEle.value.src = newMusic.url;
+  silencePromise(audioEle.value.play());
 });
 // 播放 or 暂停
 watch(isPlaying, (newPlaying) => {
+  console.log(newPlaying);
   if (newPlaying) {
-    audioEle.value.play();
+    silencePromise(audioEle.value.play());
   } else {
     audioEle.value.pause();
   }
   musicReady.value = true;
+  console.log(musicReady.value);
 });
-//
+
+// 歌词滚动
+
+// 音量调节
+
+// 上一首
+const prev = () => {
+  if (!musicReady.value) {
+    return;
+  }
+  if (playList.value.length === 1) {
+    loop();
+  } else {
+    let index = currentIndex.value - 1;
+    if (index < 0) {
+      index = playList.value.length - 1;
+    }
+    setCurrentIndex(index);
+    if (!isPlaying.value && musicReady.value) {
+      setPlaying(true);
+    }
+    musicReady.value = false;
+  }
+};
+
+// 播放 or 暂停
+const play = () => {
+  if (!musicReady.value) {
+    return;
+  }
+  setPlaying(!isPlaying.value);
+};
+// 下一首
+// 当 flag 为 true 时，表示上一曲播放失败
+const next = (flag = false) => {
+  if (!musicReady.value) {
+    return;
+  }
+  const length = playList.value.length;
+  console.log(length);
+  // **********
+  if (
+    (length - 1 === currentIndex.value && mode.value === "order") ||
+    (length === 1 && flag)
+  ) {
+    console.log(1);
+    setCurrentIndex(-1);
+    setPlaying(false);
+    return;
+  }
+  if (length === 1) {
+    loop();
+    console.log(2);
+  } else {
+    console.log(3);
+    let index = currentIndex.value + 1;
+    if (index === length) {
+      index = 0;
+    }
+    if (!isPlaying.value && musicReady.value) {
+      setPlaying(true);
+    }
+    setCurrentIndex(index);
+    musicReady.value = false;
+  }
+};
+// 循环
+const loop = () => {
+  audioEle.value.currentTime = 0;
+  silencePromise(audioEle.value.play());
+  setPlaying(true);
+  // 歌词循环
+};
+// 音乐播放时长显示
+const progressMusic = (percent) => {
+  currentTime.value = currentMusic.value.duration * percent;
+};
+// 音乐播放进度
+const progressMusicEnd = (percent) => {
+  audioEle.value.currentTime = currentMusic.value.duration * percent;
+};
 </script>
 
 <template>
@@ -86,15 +177,17 @@ watch(isPlaying, (newPlaying) => {
           :size="24"
           class="pointer"
           title="上一曲 Ctrl + Left"
+          @click="prev"
         ></MmIcon>
         <div class="control-play pointer" title="播放暂停 Ctrl + Space">
-          <MmIcon type="bofang" :size="24"></MmIcon>
+          <MmIcon type="bofang" :size="24" @click="play"></MmIcon>
         </div>
         <MmIcon
           type="xiayishou"
           :size="24"
           class="pointer"
           title="下一曲 Ctrl + Right"
+          @click="next"
         ></MmIcon>
       </div>
       <div class="music-music">

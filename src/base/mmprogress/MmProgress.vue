@@ -65,18 +65,25 @@ const commitPercent = (isEnd = false) => {
   emit(isEnd ? "percentChangeEnd" : "percentChange", percent);
 };
 
-watch(props.percent, (newPercent) => {
-  if (newPercent >= 0 && !move.value.isDragging) {
-    const innerWidth = mmProgress.value.clientWidth - dotWidth;
-    const offsetWidth = newPercent * innerWidth;
-    moveSlide(offsetWidth);
+watch(
+  () => props.percent,
+  (newPercent) => {
+    if (newPercent >= 0 && !move.value.isDragging) {
+      const innerWidth = mmProgress.value.clientWidth - dotWidth;
+      const offsetWidth = newPercent * innerWidth;
+      moveSlide(offsetWidth);
+    }
   }
-});
+);
+
 // 进度条缓冲
-watch(props.percentLoad, (newPercentLoad) => {
-  const offsetWidth = mmProgress.value.clientWidth * newPercentLoad;
-  mmProgressLoad.value.style.width = offsetWidth + "px";
-});
+watch(
+  () => props.percentLoad,
+  (newPercentLoad) => {
+    const offsetWidth = mmProgress.value.clientWidth * newPercentLoad;
+    mmProgressLoad.value.style.width = offsetWidth + "px";
+  }
+);
 
 // 鼠标点击事件
 const barClick = (e) => {
