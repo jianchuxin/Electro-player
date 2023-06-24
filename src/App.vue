@@ -4,17 +4,20 @@ import MmHeader from "components/mmheader/MmHeader.vue";
 import { ref, onMounted, nextTick } from "vue";
 import { getPlayListById } from "./apis/musiclist";
 import { usePlayListStore } from "./stores/playlist";
+import { MMPLAYER_CONFIG, VERSION, UPDATE_TIME } from "./config";
 
 const usePlayList = usePlayListStore();
 
-const initPlayList = async (id = 3778678) => {
-  const playList = await getPlayListById(id);
+const initPlayList = async () => {
+  const playList = await getPlayListById(MMPLAYER_CONFIG.PLAYLIST_ID);
   const list = playList.tracks.slice(0, 100);
   usePlayList.setPlayList(list);
 };
 
 const mmPlayer = ref(null);
 onMounted(() => {
+  console.log("当前版本：", VERSION);
+  console.log("更新时间：", UPDATE_TIME);
   // 初始化播放列表
   initPlayList();
 

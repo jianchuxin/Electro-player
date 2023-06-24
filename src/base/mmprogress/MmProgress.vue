@@ -133,11 +133,7 @@ const barUp = () => {
     <div class="mmProgress-inner">
       <div ref="mmProgressLoad" class="mmProgress-load"></div>
       <div ref="mmProgressPlay" class="mmProgress-play">
-        <div
-          class="mmProgress-dot"
-          @mousedown="barDown"
-          @touchstart.prevent="barDown"
-        ></div>
+        <div class="mmProgress-dot" @mousedown="barDown"></div>
       </div>
     </div>
   </div>

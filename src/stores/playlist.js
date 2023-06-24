@@ -4,7 +4,7 @@ import { defineStore } from "pinia";
 // 正在播放列表
 export const usePlayListStore = defineStore("playList", () => {
   const audioEle = ref(null); // 引用audio元素
-  const mode = ref("order"); // 播放模式
+  const mode = ref(1); // 播放模式，默认顺序播放
   const playList = ref([]); // 正在播放列表
   const orderList = ref([]); // 顺序播放列表
 
@@ -20,8 +20,8 @@ export const usePlayListStore = defineStore("playList", () => {
   // 设置Audio元素
   const setAudioEle = (audio) => {
     audioEle.value = audio;
-    console.log(audioEle.value);
-    console.log("设置audio元素成功!");
+    // console.log(audioEle.value);
+    // console.log("设置audio元素成功!");
   };
 
   // 设置播放状态
@@ -35,10 +35,16 @@ export const usePlayListStore = defineStore("playList", () => {
     currentMusic.value = playList.value[index] || {};
   };
 
+  // 设置播放模式
+  const setMode = (newMode) => {
+    mode.value = newMode;
+  };
+
   return {
     audioEle,
     setAudioEle,
     mode,
+    setMode,
     playList,
     setPlayList,
     orderList,

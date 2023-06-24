@@ -8,17 +8,17 @@ import { usePlayListStore } from "@/stores/playlist";
 import { storeToRefs } from "pinia";
 import { formatSecond, silencePromise } from "@/utils/util";
 import { useMmPlayer } from "@/composables/player";
-import { BACKGROUNDS } from "@/config";
+import { MMPLAYER_CONFIG, PLAY_MODE } from "@/config";
 
 const playListStore = usePlayListStore();
-const { setCurrentIndex, setPlaying } = playListStore;
+const { setCurrentIndex, setPlaying, setMode } = playListStore;
 const { currentMusic, currentIndex, isPlaying, audioEle, playList, mode } =
   storeToRefs(playListStore);
 const { musicReady, currentTime, currentProgress, initAudio } = useMmPlayer();
 
 onMounted(() => {
   initAudio();
-  console.log(BACKGROUNDS);
+  console.log(picUrl.value);
 });
 
 // 与播放器相关
@@ -32,8 +32,8 @@ const volume = ref(0.8);
 // 歌曲封面图片300X300
 const picUrl = computed(() => {
   return currentMusic.value.id && currentMusic.value.image
-    ? `url(${currentMusic.value.image})?param=300y300`
-    : "";
+    ? `url(${currentMusic.value.image}?param=300y300)`
+    : `url(${MMPLAYER_CONFIG.BACKGROUND})`;
 });
 // 播放进度百分比
 const percentMusic = computed(() => {
@@ -41,9 +41,35 @@ const percentMusic = computed(() => {
   return currentTime.value && duration ? currentTime.value / duration : 0;
 });
 
+// 获取播放模式icon
+const getModeType = computed(() => {
+  console.log(mode.value);
+  return {
+    [PLAY_MODE.LIST_LOOP]: "listloop",
+    [PLAY_MODE.ORDER]: "orderloop",
+    [PLAY_MODE.RANDOM]: "random",
+    [PLAY_MODE.LOOP]: "oneloop",
+  }[mode.value];
+});
+// 获取播放模式title
+const getModeTitle = computed(() => {
+  const key = "Ctrl + O";
+  return (
+    {
+      [PLAY_MODE.LIST_LOOP]: "列表循环",
+      [PLAY_MODE.ORDER]: "顺序播放",
+      [PLAY_MODE.RANDOM]: "随机播放",
+      [PLAY_MODE.LOOP]: "单曲循环",
+    }[mode.value] +
+    " " +
+    key
+  );
+});
+
 // 切换歌曲
 watch(currentMusic, (newMusic, oldMusic) => {
   console.log("歌曲切换");
+  console.log(picUrl.value);
   if (!newMusic.id) {
     return;
   }
@@ -106,7 +132,7 @@ const next = (flag = false) => {
   console.log(length);
   // **********
   if (
-    (length - 1 === currentIndex.value && mode.value === "order") ||
+    (length - 1 === currentIndex.value && mode.value === PLAY_MODE.ORDER) ||
     (length === 1 && flag)
   ) {
     console.log(1);
@@ -144,6 +170,13 @@ const progressMusic = (percent) => {
 // 音乐播放进度
 const progressMusicEnd = (percent) => {
   audioEle.value.currentTime = currentMusic.value.duration * percent;
+};
+
+// 切换播放顺序
+const modeChange = () => {
+  const newMode = (mode.value + 1) % 4;
+  console.log(newMode);
+  setMode(newMode);
 };
 </script>
 
@@ -221,7 +254,12 @@ const progressMusicEnd = (percent) => {
 
       <div class="options">
         <!-- 播放模式 -->
-        <MmIcon type="orderloop" title="顺序播放" :size="24"></MmIcon>
+        <MmIcon
+          :type="getModeType"
+          :title="getModeTitle"
+          :size="24"
+          @click="modeChange"
+        ></MmIcon>
         <!-- 评论 -->
         <MmIcon type="comment" title="评论" :size="24"></MmIcon>
 
