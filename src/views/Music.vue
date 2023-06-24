@@ -8,6 +8,7 @@ import { usePlayListStore } from "@/stores/playlist";
 import { storeToRefs } from "pinia";
 import { formatSecond, silencePromise } from "@/utils/util";
 import { useMmPlayer } from "@/composables/player";
+import { BACKGROUNDS } from "@/config";
 
 const playListStore = usePlayListStore();
 const { setCurrentIndex, setPlaying } = playListStore;
@@ -17,6 +18,7 @@ const { musicReady, currentTime, currentProgress, initAudio } = useMmPlayer();
 
 onMounted(() => {
   initAudio();
+  console.log(BACKGROUNDS);
 });
 
 // 与播放器相关
@@ -180,7 +182,11 @@ const progressMusicEnd = (percent) => {
           @click="prev"
         ></MmIcon>
         <div class="control-play pointer" title="播放暂停 Ctrl + Space">
-          <MmIcon type="play-bold" :size="24" @click="play"></MmIcon>
+          <MmIcon
+            :type="isPlaying ? 'pause-bold' : 'play-bold'"
+            :size="20"
+            @click="play"
+          ></MmIcon>
         </div>
         <MmIcon
           type="next"
