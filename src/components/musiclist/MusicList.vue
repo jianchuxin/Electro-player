@@ -33,9 +33,11 @@ const isDuration = computed(() => {
 });
 
 // 根据播放 or 暂停状态 设定图标
-const getStateType = computed(() => {
-  return "bofang";
-});
+const getStateType = ({ id: itemId }) => {
+  return isPlaying.value && currentMusic.value.id === itemId
+    ? "pause-circle"
+    : "play-circle";
+};
 
 // 获取播放时间，格式为 mm:ss
 const getFormatTime = (seconds) => {
@@ -115,14 +117,14 @@ const listScroll = (e) => {
           v-for="(item, index) in list"
           :key="item.id"
           class="list-item"
-          :class="{ on: isPlaying }"
+          :class="{ on: isPlaying && currentMusic.id === item.id }"
           @dblclick="selectItem(item, index)"
         >
           <div class="list-num" v-text="index + 1"></div>
           <div class="list-name">
             <span class="list-name-text">{{ item.name }}</span>
             <MmIcon
-              :type="getStateType"
+              :type="getStateType(item)"
               :size="32"
               class="hover list-menu-icon"
               @click.stop="selectItem(item, index)"
@@ -134,7 +136,7 @@ const listScroll = (e) => {
               getFormatTime(item.duration % 3600)
             }}</span>
             <MmIcon
-              type="shanchu"
+              type="delete"
               :size="32"
               class="hover list-menu-icon-del"
               @click.stop="deleteItem"
@@ -181,6 +183,14 @@ const listScroll = (e) => {
   line-height: 50px;
   overflow: hidden;
 
+  &.on {
+    color: #fff;
+
+    .list-num {
+      font-size: 0;
+      background: url("assets/img/wave.gif") no-repeat center center;
+    }
+  }
   .list-num {
     display: block;
     width: 30px;

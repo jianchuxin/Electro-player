@@ -173,17 +173,17 @@ const progressMusicEnd = (percent) => {
       <div class="music-bar-btns">
         <!-- icon -->
         <MmIcon
-          type="shangyishouge"
+          type="prev"
           :size="24"
           class="pointer"
           title="上一曲 Ctrl + Left"
           @click="prev"
         ></MmIcon>
         <div class="control-play pointer" title="播放暂停 Ctrl + Space">
-          <MmIcon type="bofang" :size="24" @click="play"></MmIcon>
+          <MmIcon type="play-bold" :size="24" @click="play"></MmIcon>
         </div>
         <MmIcon
-          type="xiayishou"
+          type="next"
           :size="24"
           class="pointer"
           title="下一曲 Ctrl + Right"
@@ -215,9 +215,9 @@ const progressMusicEnd = (percent) => {
 
       <div class="options">
         <!-- 播放模式 -->
-        <MmIcon type="shunxubofang" title="顺序播放" :size="30"></MmIcon>
+        <MmIcon type="orderloop" title="顺序播放" :size="24"></MmIcon>
         <!-- 评论 -->
-        <MmIcon type="pinglun" title="评论" :size="30"></MmIcon>
+        <MmIcon type="comment" title="评论" :size="24"></MmIcon>
 
         <!-- 音量控制 -->
         <div class="music-bar-volume" title="音量加减 [Ctrl + Up / Down]">
@@ -272,7 +272,6 @@ const progressMusicEnd = (percent) => {
 
   // 底部mmPlayer-bar
   .music-bar {
-    background-color: #111;
     display: flex;
     align-items: center;
     width: 100%;
