@@ -4,30 +4,32 @@ import MusicBtn from "components/musicbtn/MusicBtn.vue";
 import MmProgress from "base/mmprogress/MmProgress.vue";
 import Volume from "components/volume/Volume.vue";
 import { ref, watch, computed, onMounted } from "vue";
-import { usePlayListStore } from "@/stores/playlist";
 import { storeToRefs } from "pinia";
-import { formatSecond, silencePromise } from "@/utils/util";
+import { usePlayListStore } from "@/stores/playlist";
+import { useUserStore } from "@/stores/user";
 import { useMmPlayer } from "@/composables/player";
+import { formatSecond, silencePromise } from "@/utils/util";
 import { MMPLAYER_CONFIG, PLAY_MODE } from "@/config";
 
+// 引入store中的变量与函数
 const playListStore = usePlayListStore();
 const { setCurrentIndex, setPlaying, setMode } = playListStore;
 const { currentMusic, currentIndex, isPlaying, audioEle, playList, mode } =
   storeToRefs(playListStore);
+const userStore = useUserStore();
+const { setVolume } = userStore;
+const { volume } = storeToRefs(userStore); // 音量大小
+const isMute = ref(false); // 是否静音
+
+// 与播放器进度相关变量和函数
 const { musicReady, currentTime, currentProgress, initAudio } = useMmPlayer();
+// 歌词显示变量**********
 
 onMounted(() => {
   initAudio();
+  initKeyDown();
   console.log(picUrl.value);
 });
-
-// 与播放器相关
-// const musicReady = ref(false);
-// const currentTime = ref(0);
-// const currentProgress = ref(0);
-// 歌词显示
-const isMute = ref(false);
-const volume = ref(0.8);
 
 // 歌曲封面图片300X300
 const picUrl = computed(() => {
@@ -94,6 +96,28 @@ watch(isPlaying, (newPlaying) => {
 // 歌词滚动
 
 // 音量调节
+const volumeChange = (percent) => {
+  isMute.value = percent === 0;
+  audioEle.value.volume = percent;
+  setVolume(percent);
+  // console.log(volume.value);
+};
+
+// 音乐播放时长显示
+const progressMusic = (percent) => {
+  currentTime.value = currentMusic.value.duration * percent;
+};
+// 音乐播放进度
+const progressMusicEnd = (percent) => {
+  audioEle.value.currentTime = currentMusic.value.duration * percent;
+};
+
+// 切换播放顺序 *********@@@@@@@@@
+const modeChange = () => {
+  const newMode = (mode.value + 1) % 4;
+  console.log(newMode);
+  setMode(newMode);
+};
 
 // 上一首
 const prev = () => {
@@ -161,22 +185,44 @@ const loop = () => {
   audioEle.value.currentTime = 0;
   silencePromise(audioEle.value.play());
   setPlaying(true);
-  // 歌词循环
+  // 歌词循环 ********@@@@@@@@
 };
-// 音乐播放时长显示
-const progressMusic = (percent) => {
-  currentTime.value = currentMusic.value.duration * percent;
-};
-// 音乐播放进度
-const progressMusicEnd = (percent) => {
-  audioEle.value.currentTime = currentMusic.value.duration * percent;
-};
-
-// 切换播放顺序
-const modeChange = () => {
-  const newMode = (mode.value + 1) % 4;
-  console.log(newMode);
-  setMode(newMode);
+// 键盘快捷键
+const initKeyDown = () => {
+  document.onkeydown = (e) => {
+    if (!e.ctrlKey) {
+      return;
+    }
+    switch (e.key) {
+      case " ":
+        play();
+        break;
+      case "ArrowLeft":
+        prev();
+        break;
+      case "ArrowRight":
+        next();
+        break;
+      case "ArrowUp": {
+        let newVolume = volume.value + 0.1;
+        if (newVolume > 1) {
+          newVolume = 1;
+        }
+        volumeChange(newVolume);
+        break;
+      }
+      case "ArrowDown": {
+        let newVolume = volume.value - 0.1;
+        if (newVolume < 0) {
+          newVolume = 0;
+        }
+        volumeChange(newVolume);
+        break;
+      }
+      default:
+        break;
+    }
+  };
 };
 </script>
 
@@ -255,17 +301,19 @@ const modeChange = () => {
       <div class="options">
         <!-- 播放模式 -->
         <MmIcon
+          class="pointer"
           :type="getModeType"
           :title="getModeTitle"
           :size="24"
           @click="modeChange"
         ></MmIcon>
+
         <!-- 评论 -->
-        <MmIcon type="comment" title="评论" :size="24"></MmIcon>
+        <MmIcon class="pointer" type="comment" title="评论" :size="24"></MmIcon>
 
         <!-- 音量控制 -->
         <div class="music-bar-volume" title="音量加减 [Ctrl + Up / Down]">
-          <Volume></Volume>
+          <Volume :volume="volume" @volume-change="volumeChange"></Volume>
         </div>
       </div>
     </div>
@@ -317,6 +365,7 @@ const modeChange = () => {
   // 底部mmPlayer-bar
   .music-bar {
     display: flex;
+    gap: 40px;
     align-items: center;
     width: 100%;
     padding: 15px 0;
@@ -324,9 +373,6 @@ const modeChange = () => {
     &.disabled {
       pointer-events: none;
       opacity: 0.6;
-    }
-    .icon-color {
-      color: #fff;
     }
     .music-bar-btns {
       display: flex;
@@ -348,7 +394,7 @@ const modeChange = () => {
       width: 100%;
       flex: 1;
       box-sizing: border-box;
-      padding-left: 40px;
+      // padding-left: 40px;
       font-size: @font_size_small;
       color: @text_color_active;
       .music-bar-info {
