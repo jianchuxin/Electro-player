@@ -75,8 +75,9 @@ const cancel = () => {
             ></div>
           </div>
         </div>
-      </div></div
-  ></Teleport>
+      </div>
+    </div>
+  </Teleport>
 </template>
 
 <style lang="less">
@@ -94,6 +95,7 @@ const cancel = () => {
     user-select: none;
     backdrop-filter: @backdrop_filter;
     // 动画
+    animation:mm-dialog-fadein 0.3s;
     .@{dialog-prefix-cls}-wrapper{
         position: absolute;
         top: 50%;
@@ -104,6 +106,7 @@ const cancel = () => {
             width: 420px;
             border-radius: @dialog_border_radius;
             background:@dialog_content_bg_color;
+            animation: mm-dialog-zoom 0.3s;
             // @media
             .@{dialog-prefix-cls}-head{
                 padding: 15px;
@@ -143,6 +146,26 @@ const cancel = () => {
             }
         }
     }
+}
 
+@keyframes mm-dialog-fadein{
+    0%{
+        opacity: 0;
+    }
+    100%{
+        opacity: 1;
+    }
+}
+
+@keyframes mm-dialog-zoom{
+    0%{
+        transform: scale(0);
+    }
+    50%{
+        transform: scale(1.1);
+    }
+    100%{
+        transform:scale(1);
+    }
 }
 </style>
