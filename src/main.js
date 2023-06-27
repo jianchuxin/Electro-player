@@ -12,6 +12,13 @@ app.component(Icon.name, Icon);
 
 const pinia = createPinia();
 pinia.use(piniaPluginPersistedstate);
+
+app.directive("focus", {
+  mounted: (el) => {
+    el.focus();
+  },
+});
+
 app.use(pinia);
 
 app.use(router);

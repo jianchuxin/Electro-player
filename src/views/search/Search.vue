@@ -86,6 +86,7 @@ const selectItem = () => {
         class="search-input"
         type="text"
         placeholder="音乐/歌手"
+        autofocus
         @keyup.enter="onSearch"
       />
     </div>

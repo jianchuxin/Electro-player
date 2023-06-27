@@ -1,3 +1,76 @@
+<script setup>
+import MmDialog from "base/mmdialog/MmDialog.vue";
+import { useUserStore } from "@/stores/user";
+import { getUserPlayList } from "apis/userinfo";
+import { storeToRefs } from "pinia";
+import { ref, computed } from "vue";
+
+const userStore = useUserStore();
+const { uid } = storeToRefs(userStore);
+const { setUid } = userStore;
+
+const uidValue = ref("");
+const userInfo = ref({});
+// 弹窗模板引用
+const loginDialog = ref(null);
+const helpDialog = ref(null);
+const logoutDialog = ref(null);
+
+const isLoggedin = computed(() => {
+  return uid.value !== "";
+});
+
+const avatarUrl = computed(() => {
+  return userInfo.value?.avatarUrl + "?param=50y50";
+});
+
+const opendialog = (type) => {
+  switch (type) {
+    case "login":
+      loginDialog.value.show();
+      break;
+    case "help":
+      loginDialog.value.hide();
+      helpDialog.value.show();
+      break;
+    case "logout":
+      logoutDialog.value.show();
+      break;
+  }
+};
+
+const login = () => {
+  if (uidValue.value === "") {
+    alert("UID 不能为空");
+    opendialog("login");
+    return;
+  }
+  getUserInfo(uidValue.value);
+  uidValue.value = "";
+};
+
+const logout = () => {
+  setUid("");
+  uidValue.value = "";
+  console.log("退出成功!");
+};
+
+const getUserInfo = async (uid) => {
+  const res = await getUserPlayList(uid);
+  const { playlist } = res;
+  if (playlist.length === 0 || !playlist[0].creator) {
+    alert(`未找到 UID 为 ${uid} 的用户信息`);
+    return;
+  }
+  userInfo.value = playlist[0].creator;
+  setUid(uid);
+  console.log("登录成功!");
+  setTimeout(() => {
+    alert(`${userInfo.value.nickname} 欢迎使用 mmPlayer`);
+  }, 200);
+};
+</script>
+
 <template>
   <header class="mm-header">
     <h1 class="header">
@@ -5,14 +78,13 @@
       <!-- 页面累计访问数 -->
       <!-- <img src="" alt=""> -->
     </h1>
-
     <!-- 用户信息--头像和登录 -->
     <dl class="user">
       <template v-if="isLoggedin">
         <RouterLink to="/music/userlist" custom v-slot="{ navigate }">
           <dt @click="navigate" class="user-info" role="link">
-            <img src="" class="avatar" alt="img" />
-            <span class="user-name">你的名字</span>
+            <img :src="avatarUrl" class="avatar" alt="img" />
+            <span class="user-name">{{ userInfo.nickname }}</span>
           </dt>
         </RouterLink>
         <dd class="user-btn" @click="opendialog('logout')">退出</dd>
@@ -34,7 +106,7 @@
           v-model.trim="uidValue"
           class="mm-dialog-input"
           placeholder="请输入您的网易云 UID"
-          autofocus
+          v-focus
           @keyup.enter="login"
         />
       </div>
@@ -71,59 +143,6 @@
     ></MmDialog>
   </header>
 </template>
-
-<script setup>
-import MmDialog from "base/mmdialog/MmDialog.vue";
-import { useUserStore } from "@/stores/user";
-import { storeToRefs } from "pinia";
-import { ref, computed } from "vue";
-
-const userStore = useUserStore();
-// const { uid } = storeToRefs(userStore);
-const { setUid } = userStore;
-
-const isLoggedin = ref(false);
-const uidValue = ref("");
-
-// 弹窗模板引用
-const loginDialog = ref(null);
-const helpDialog = ref(null);
-const logoutDialog = ref(null);
-
-const opendialog = (type) => {
-  switch (type) {
-    case "login":
-      loginDialog.value.show();
-      break;
-    case "help":
-      loginDialog.value.hide();
-      helpDialog.value.show();
-      break;
-    case "logout":
-      logoutDialog.value.show();
-      break;
-  }
-};
-
-const login = () => {
-  if (uidValue.value === "") {
-    alert("UID 不能为空");
-    opendialog("login");
-    return;
-  }
-  // isLoggedin.value = true;
-  setUid(uidValue.value);
-  isLoggedin.value = true;
-  console.log("登录成功!");
-};
-
-const logout = () => {
-  setUid("");
-  uidValue.value = "";
-  isLoggedin.value = false;
-  console.log("退出成功!");
-};
-</script>
 
 <style lang="less" scoped>
 .mm-header {
