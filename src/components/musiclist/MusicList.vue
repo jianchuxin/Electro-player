@@ -32,6 +32,21 @@ const isDuration = computed(() => {
   return props.listType === "duration";
 });
 
+watch(
+  () => props.list,
+  (newList, oldList) => {
+    if (props.listType !== "pullUp") {
+      return;
+    }
+    // lockUp.value = false;
+    if (newList.length !== oldList.length) {
+      lockUp.value = false;
+    } else if (newList[newList.length - 1].id !== oldList[oldList.length - 1]) {
+      lockUp.value = false;
+    }
+  }
+);
+
 // 根据播放 or 暂停状态 设定图标
 const getStateType = ({ id: itemId }) => {
   return isPlaying.value && currentMusic.value.id === itemId
@@ -56,35 +71,9 @@ const selectItem = (item, index) => {
 };
 
 // 删除特定歌曲
-const deleteItem = () => {
-  console.log("delete!");
+const deleteItem = (index) => {
+  emit("del", index);
 };
-
-// 切换搜索时，列表滑动到顶部，暴露给父组件
-const listContent = ref(null);
-const scrollToTop = () => {
-  listContent.value.scrollTop = 0;
-};
-
-defineExpose({ scrollToTop });
-
-watch(
-  () => props.list,
-  (newList, oldList) => {
-    // console.log("list change");
-    // console.log(oldList.length);
-    // console.log(newList.length);
-    if (props.listType !== "pullUp") {
-      return;
-    }
-    // lockUp.value = false;
-    if (newList.length !== oldList.length) {
-      lockUp.value = false;
-    } else if (newList[newList.length - 1].id !== oldList[oldList.length - 1]) {
-      lockUp.value = false;
-    }
-  }
-);
 
 // 滚动加载，pullup类型
 const lockUp = ref(true); // 是否锁定滚动加载事件
@@ -101,6 +90,14 @@ const listScroll = (e) => {
     emit("pullUpLoad"); // 触发滚动加载事件
   }
 };
+
+// 切换搜索时，列表滑动到顶部，暴露给父组件
+const listContent = ref(null);
+const scrollToTop = () => {
+  listContent.value.scrollTop = 0;
+};
+
+defineExpose({ scrollToTop });
 </script>
 
 <template>
@@ -139,7 +136,7 @@ const listScroll = (e) => {
               type="delete"
               :size="32"
               class="hover list-menu-icon-del"
-              @click.stop="deleteItem"
+              @click.stop="deleteItem(index)"
               @dblclick.stop=""
             />
           </div>

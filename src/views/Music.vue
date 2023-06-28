@@ -3,7 +3,7 @@ import Lyric from "components/lyric/Lyric.vue";
 import MusicBtn from "components/musicbtn/MusicBtn.vue";
 import MmProgress from "base/mmprogress/MmProgress.vue";
 import Volume from "components/volume/Volume.vue";
-import { ref, watch, computed, onMounted } from "vue";
+import { ref, watch, computed, onMounted, nextTick } from "vue";
 import { storeToRefs } from "pinia";
 import { usePlayListStore } from "@/stores/playlist";
 import { useUserStore } from "@/stores/user";
@@ -28,7 +28,6 @@ const { musicReady, currentTime, currentProgress, initAudio } = useMmPlayer();
 onMounted(() => {
   initAudio();
   initKeyDown();
-  console.log(picUrl.value);
 });
 
 // 歌曲封面图片300X300
@@ -45,7 +44,6 @@ const percentMusic = computed(() => {
 
 // 获取播放模式icon
 const getModeType = computed(() => {
-  console.log(mode.value);
   return {
     [PLAY_MODE.LIST_LOOP]: "listloop",
     [PLAY_MODE.ORDER]: "orderloop",
@@ -70,8 +68,6 @@ const getModeTitle = computed(() => {
 
 // 切换歌曲
 watch(currentMusic, (newMusic, oldMusic) => {
-  console.log("歌曲切换");
-  console.log(picUrl.value);
   if (!newMusic.id) {
     return;
   }
@@ -83,14 +79,11 @@ watch(currentMusic, (newMusic, oldMusic) => {
 });
 // 播放 or 暂停
 watch(isPlaying, (newPlaying) => {
-  console.log(newPlaying);
-  if (newPlaying) {
-    silencePromise(audioEle.value.play());
-  } else {
-    audioEle.value.pause();
-  }
-  musicReady.value = true;
-  console.log(musicReady.value);
+  const audio = audioEle.value;
+  nextTick(() => {
+    newPlaying ? silencePromise(audio.play()) : audio.pause();
+    musicReady.value = true;
+  });
 });
 
 // 歌词滚动
@@ -100,7 +93,6 @@ const volumeChange = (percent) => {
   isMute.value = percent === 0;
   audioEle.value.volume = percent;
   setVolume(percent);
-  // console.log(volume.value);
 };
 
 // 音乐播放时长显示
@@ -115,7 +107,6 @@ const progressMusicEnd = (percent) => {
 // 切换播放顺序 *********@@@@@@@@@
 const modeChange = () => {
   const newMode = (mode.value + 1) % 4;
-  console.log(newMode);
   setMode(newMode);
 };
 
@@ -153,22 +144,18 @@ const next = (flag = false) => {
     return;
   }
   const length = playList.value.length;
-  console.log(length);
   // **********
   if (
     (length - 1 === currentIndex.value && mode.value === PLAY_MODE.ORDER) ||
     (length === 1 && flag)
   ) {
-    console.log(1);
     setCurrentIndex(-1);
     setPlaying(false);
     return;
   }
   if (length === 1) {
     loop();
-    console.log(2);
   } else {
-    console.log(3);
     let index = currentIndex.value + 1;
     if (index === length) {
       index = 0;

@@ -1,25 +1,34 @@
 <script setup>
 import MusicList from "components/musiclist/MusicList.vue";
+import MmDialog from "base/mmdialog/MmDialog.vue";
 import { usePlayListStore } from "@/stores/playlist";
 import { storeToRefs } from "pinia";
+import { ref } from "vue";
 const playListStore = usePlayListStore();
-const { setPlaying, setCurrentIndex } = playListStore;
 const { currentMusic, playList } = storeToRefs(playListStore);
+const { setPlaying, setCurrentIndex, clearPlayList, deletePlayListMusic } =
+  playListStore;
+
+const clearDialog = ref(null);
+const showDialog = () => {
+  clearDialog.value?.show();
+};
+// 清除列表
+const clearList = () => {
+  clearPlayList();
+  alert("列表清除成功!");
+};
 // 选择播放
 const selectItem = (item, index) => {
-  console.log("收到信号select");
   if (item.id !== currentMusic.value.id) {
     setCurrentIndex(index);
     setPlaying(true);
   }
 };
-
-const deleteItem = () => {
-  //
-};
-
-const showDialog = () => {
-  //
+// 删除事件
+const deleteItem = (index) => {
+  deletePlayListMusic(index);
+  // alert("删除成功!");
 };
 </script>
 
@@ -37,12 +46,16 @@ const showDialog = () => {
         </div>
       </template>
     </MusicList>
-
-    <!-- mm-dialog -->
+    <MmDialog
+      ref="clearDialog"
+      body-text="是否清空播放历史列表"
+      confirm-btn-text="清空"
+      @confirm="clearList"
+    />
   </div>
 </template>
 
-<style scoped lang="less">
+<style lang="less" scoped>
 .list-btn {
   .flex-center;
   height: 50px;

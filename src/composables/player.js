@@ -1,9 +1,14 @@
 import { usePlayListStore } from "@/stores/playlist";
+import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
 const playlistStore = usePlayListStore();
 const { setPlaying } = playlistStore;
 const { audioEle, currentMusic, playList } = storeToRefs(playlistStore);
+
+const userStore = useUserStore();
+const { addHistoryMusic } = userStore;
+
 const duration = currentMusic.value.duration;
 let retry = 1; // 重试次数
 
@@ -38,6 +43,12 @@ export const useMmPlayer = () => {
       timer = setTimeout(() => {
         musicReady.value = true;
       }, 100);
+    };
+
+    // 将能播放的音乐加入到播放历史列表中
+    audioEle.value.oncanplay = () => {
+      retry = 1;
+      addHistoryMusic(currentMusic.value);
     };
 
     // 播放时间递增

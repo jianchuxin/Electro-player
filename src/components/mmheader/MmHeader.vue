@@ -3,7 +3,7 @@ import MmDialog from "base/mmdialog/MmDialog.vue";
 import { useUserStore } from "@/stores/user";
 import { getUserPlayList } from "apis/userinfo";
 import { storeToRefs } from "pinia";
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 
 const userStore = useUserStore();
 const { uid } = storeToRefs(userStore);
@@ -18,6 +18,10 @@ const logoutDialog = ref(null);
 
 const isLoggedin = computed(() => {
   return uid.value !== "";
+});
+
+onMounted(() => {
+  uid.value && getUserInfo(uid.value);
 });
 
 const avatarUrl = computed(() => {
@@ -65,9 +69,9 @@ const getUserInfo = async (uid) => {
   userInfo.value = playlist[0].creator;
   setUid(uid);
   console.log("登录成功!");
-  setTimeout(() => {
-    alert(`${userInfo.value.nickname} 欢迎使用 mmPlayer`);
-  }, 200);
+  // setTimeout(() => {
+  //   alert(`${userInfo.value.nickname} 欢迎使用 mmPlayer`);
+  // }, 200);
 };
 </script>
 

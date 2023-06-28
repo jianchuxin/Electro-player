@@ -9,28 +9,65 @@ export const useUserStore = defineStore(
     const uid = ref("");
     const historyList = ref([]);
     const volume = ref(MMPLAYER_CONFIG.VOLUME);
+    const HISTORYLIST_MAX_LENGTH = 200;
 
+    // 设置登录用户uid
     const setUid = (u) => {
       uid.value = u;
     };
-
+    // 设置音量
+    const setVolume = (vol) => {
+      volume.value = vol;
+    };
+    // 设置播放历史
     const setHistoryList = (list) => {
       historyList.value = list;
     };
 
-    const setVolume = (vol) => {
-      volume.value = vol;
+    // 添加音乐
+    const addHistoryMusic = (music) => {
+      const list = [...historyList.value];
+      const index = list.findIndex((item) => item.id === music.id);
+      if (index === 0) {
+        return;
+      }
+      if (index > 0) {
+        list.splice(index, 1);
+      }
+      list.unshift(music);
+      if (list.length > HISTORYLIST_MAX_LENGTH) {
+        list.pop();
+      }
+      setHistoryList(list);
     };
-    return { uid, setUid, historyList, setHistoryList, volume, setVolume };
+
+    // 清空播放历史
+    const clearHistoryList = () => {
+      setHistoryList([]);
+    };
+
+    // 删除播放历史
+    const deleteHistoryMusic = (index) => {
+      let list = historyList.value;
+      list.splice(index, 1);
+      setHistoryList(list);
+    };
+
+    return {
+      uid,
+      setUid,
+      historyList,
+      setHistoryList,
+      addHistoryMusic,
+      clearHistoryList,
+      deleteHistoryMusic,
+      volume,
+      setVolume,
+    };
   },
   {
     persist: {
-      // paths:['historyList','useId']
+      paths: ["uid", "historyList", "volume"],
     },
   }
 );
-
-// const array = [,,,,,]
-// const array = new Array(5)
-// const array =  Array(1,2,3,4,5,6)
-// const array = new Array('', '', '', '', '')
