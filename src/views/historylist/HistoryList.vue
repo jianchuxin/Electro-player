@@ -1,4 +1,6 @@
 <script setup>
+import { showToast } from "base/mmtoast/index";
+
 import MusicList from "@/components/musiclist/MusicList.vue";
 import MmDialog from "@/base/mmdialog/MmDialog.vue";
 import { useUserStore } from "@/stores/user";
@@ -24,7 +26,8 @@ const showDialog = () => {
 // 清空列表
 const clearList = () => {
   clearHistoryList();
-  alert("清除成功!");
+  showToast();
+  // alert("清除成功!");
 };
 
 // 选择播放，将播放列表改为历史列表
@@ -36,7 +39,7 @@ const selectItem = (item, index) => {
 // 删除事件
 const deleteItem = (index) => {
   deleteHistoryMusic(index);
-  alert("删除成功!");
+  showToast({ message: "删除成功!", position: "center" });
 };
 </script>
 <template>
