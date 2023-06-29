@@ -9,7 +9,6 @@ const { audioEle, currentMusic, playList } = storeToRefs(playlistStore);
 const userStore = useUserStore();
 const { addHistoryMusic } = userStore;
 
-const duration = currentMusic.value.duration;
 let retry = 1; // 重试次数
 
 export const useMmPlayer = () => {
@@ -22,14 +21,16 @@ export const useMmPlayer = () => {
   //   const volume = ref(0.8);
   const initAudio = () => {
     // 音频缓冲
-    audioEle.value.onProgress = () => {
+    audioEle.value.onprogress = () => {
       try {
         if (audioEle.value.buffered.length > 0) {
+          const duration = currentMusic.value.duration;
           let buffered = 0; //记录已缓冲时长
+          audioEle.value.buffered.end(0);
           buffered =
-            audioEle.value.end(0) > duration
+            audioEle.value.buffered.end(0) > duration
               ? duration
-              : audioEle.buffered.end(0);
+              : audioEle.value.buffered.end(0);
           currentProgress.value = buffered / duration;
         }
       } catch (e) {
@@ -95,5 +96,5 @@ export const useMmPlayer = () => {
     // 将能播放的音乐加入播放历史 *****
   };
 
-  return { musicReady, currentTime, currentProgress, initAudio };
+  return { musicReady, currentTime, currentMusic, currentProgress, initAudio };
 };

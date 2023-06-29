@@ -80,7 +80,8 @@ watch(
 watch(
   () => props.percentLoad,
   (newPercentLoad) => {
-    const offsetWidth = mmProgress.value.clientWidth * newPercentLoad;
+    const innerWidth = mmProgress.value.clientWidth - dotWidth;
+    const offsetWidth = newPercentLoad * innerWidth;
     mmProgressLoad.value.style.width = offsetWidth + "px";
   }
 );

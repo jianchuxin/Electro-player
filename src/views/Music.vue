@@ -26,6 +26,7 @@ const { musicReady, currentTime, currentProgress, initAudio } = useMmPlayer();
 // 歌词显示变量**********
 
 onMounted(() => {
+  // instance.
   initAudio();
   initKeyDown();
 });
@@ -75,6 +76,8 @@ watch(currentMusic, (newMusic, oldMusic) => {
     return;
   }
   audioEle.value.src = newMusic.url;
+  // 重置相关参数
+  currentProgress.value = 0;
   silencePromise(audioEle.value.play());
 });
 // 播放 or 暂停
