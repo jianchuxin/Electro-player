@@ -5,6 +5,7 @@ import { ref, onMounted } from "vue";
 import { getSearchHot, getSearchList } from "apis/musiclist";
 import { formatSongs } from "@/utils/song";
 import { useLoading } from "@/composables/loading"; // 使用组合式函数代替mixins
+import { showToast } from "base/mmtoast/index";
 const searchValue = ref("");
 const searchHotWords = ref([]);
 const searchList = ref([]);
@@ -36,7 +37,7 @@ const onSearch = async () => {
   searchValue.value = searchValue.value.trim();
   // console.log(searchValue.value);
   if (searchValue.value === "clickHot") {
-    alert("搜索内容不能为空~");
+    showToast({ message: "搜索内容不能为空~" });
     return;
   }
   // loading....
@@ -47,7 +48,6 @@ const onSearch = async () => {
   }
   const res = await getSearchList(searchValue.value);
   const result = res.result;
-  // console.log(result);
   searchList.value = formatSongs(result.songs);
   // loading end
   // 调用组合式函数--> @/composables/load.js
@@ -59,13 +59,13 @@ const pullUpLoad = async () => {
   page.value++;
   const res = await getSearchList(searchValue.value, page.value);
   const result = res.result;
-  // console.log(result);
   if (!result.songs) {
-    alert("没有更多歌曲啦!");
+    showToast({ message: "没有更多歌曲啦!" });
     return;
   }
   searchList.value = [...searchList.value, ...formatSongs(result.songs)];
 };
+
 const selectItem = () => {
   //
 };

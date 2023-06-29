@@ -4,6 +4,7 @@ import { useUserStore } from "@/stores/user";
 import { getUserPlayList } from "apis/userinfo";
 import { storeToRefs } from "pinia";
 import { ref, computed, onMounted } from "vue";
+import { showToast } from "base/mmtoast/index";
 
 const userStore = useUserStore();
 const { uid } = storeToRefs(userStore);
@@ -45,7 +46,7 @@ const opendialog = (type) => {
 
 const login = () => {
   if (uidValue.value === "") {
-    alert("UID 不能为空");
+    showToast({ message: "UID 不能为空", position: "top" });
     opendialog("login");
     return;
   }
@@ -56,22 +57,24 @@ const login = () => {
 const logout = () => {
   setUid("");
   uidValue.value = "";
-  console.log("退出成功!");
+  showToast({ message: "退出成功!", position: "top" });
 };
 
 const getUserInfo = async (uid) => {
   const res = await getUserPlayList(uid);
   const { playlist } = res;
   if (playlist.length === 0 || !playlist[0].creator) {
-    alert(`未找到 UID 为 ${uid} 的用户信息`);
+    showToast({ message: `未找到 UID 为 ${uid} 的用户信息`, position: "top" });
     return;
   }
   userInfo.value = playlist[0].creator;
   setUid(uid);
-  console.log("登录成功!");
-  // setTimeout(() => {
-  //   alert(`${userInfo.value.nickname} 欢迎使用 mmPlayer`);
-  // }, 200);
+  setTimeout(() => {
+    showToast({
+      message: `${userInfo.value.nickname} 欢迎使用 mmPlayer`,
+      position: "top",
+    });
+  }, 200);
 };
 </script>
 

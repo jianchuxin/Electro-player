@@ -4,6 +4,7 @@ import MmDialog from "base/mmdialog/MmDialog.vue";
 import { usePlayListStore } from "@/stores/playlist";
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
+import { showToast } from "base/mmtoast/index";
 const playListStore = usePlayListStore();
 const { currentMusic, playList } = storeToRefs(playListStore);
 const { setPlaying, setCurrentIndex, clearPlayList, deletePlayListMusic } =
@@ -16,7 +17,7 @@ const showDialog = () => {
 // 清除列表
 const clearList = () => {
   clearPlayList();
-  alert("列表清除成功!");
+  showToast({ message: "列表清除成功!" });
 };
 // 选择播放
 const selectItem = (item, index) => {
@@ -28,7 +29,7 @@ const selectItem = (item, index) => {
 // 删除事件
 const deleteItem = (index) => {
   deletePlayListMusic(index);
-  // alert("删除成功!");
+  showToast({ message: "删除成功!" });
 };
 </script>
 

@@ -10,6 +10,7 @@ import { useUserStore } from "@/stores/user";
 import { useMmPlayer } from "@/composables/player";
 import { formatSecond, silencePromise, randomSortArray } from "@/utils/util";
 import { MMPLAYER_CONFIG, PLAY_MODE } from "@/config";
+import { showToast } from "base/mmtoast/index";
 
 // 引入store中的变量与函数
 const playListStore = usePlayListStore();
@@ -46,10 +47,11 @@ onMounted(() => {
   };
   // 音乐播放出错
   audioEle.value.onerror = () => {
-    alert("当前音乐不可播放，已自动播放下一首");
+    let alertMsg = "当前音乐不可播放，已自动播放下一首";
     if (playList.value.length === 1) {
-      alert("暂时没有可播放的音乐哦~");
+      alertMsg = "暂时没有可播放的音乐哦~";
     }
+    showToast({ message: alertMsg });
     next();
   };
   initKeyDown();

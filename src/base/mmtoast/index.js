@@ -21,12 +21,12 @@ export class ToastCreator {
     // 到时间消失
     if (defaultOptions.duration) {
       setTimeout(() => {
-        this.dismissA(); // 注意回调函数this的问题
+        this.dismiss(); // 注意回调函数this的问题
       }, defaultOptions.duration);
     }
   }
 
-  dismissA() {
+  dismiss() {
     document.body.removeChild(this.container);
   }
 }
