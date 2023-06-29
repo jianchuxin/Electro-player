@@ -21,13 +21,13 @@ for (const path in modules) {
  * LIST_LOOP: 列表循环
  * ORDER: 顺序播放
  * RANDOM: 随机播放
- * LOOP: 单曲循环
+ * ONE_LOOP: 单曲循环
  */
 export const PLAY_MODE = {
   LIST_LOOP: 0,
   ORDER: 1,
   RANDOM: 2,
-  LOOP: 3,
+  ONE_LOOP: 3,
 };
 
 /**

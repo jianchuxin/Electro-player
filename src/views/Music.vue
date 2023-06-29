@@ -28,6 +28,23 @@ const { musicReady, currentTime, currentProgress, initAudio } = useMmPlayer();
 onMounted(() => {
   // instance.
   initAudio();
+  // 播放结束
+  audioEle.value.onended = () => {
+    console.log(mode.value);
+    if (mode.value === PLAY_MODE.ONE_LOOP) {
+      loop();
+    } else {
+      next();
+    }
+  };
+  // 音乐播放出错
+  audioEle.value.onerror = () => {
+    alert("当前音乐不可播放，已自动播放下一首");
+    if (playList.value.length === 1) {
+      alert("暂时没有可播放的音乐哦~");
+    }
+    next();
+  };
   initKeyDown();
 });
 
@@ -47,9 +64,9 @@ const percentMusic = computed(() => {
 const getModeType = computed(() => {
   return {
     [PLAY_MODE.LIST_LOOP]: "listloop",
-    [PLAY_MODE.ORDER]: "orderloop",
+    [PLAY_MODE.ORDER]: "order",
     [PLAY_MODE.RANDOM]: "random",
-    [PLAY_MODE.LOOP]: "oneloop",
+    [PLAY_MODE.ONE_LOOP]: "oneloop",
   }[mode.value];
 });
 // 获取播放模式title
@@ -60,7 +77,7 @@ const getModeTitle = computed(() => {
       [PLAY_MODE.LIST_LOOP]: "列表循环",
       [PLAY_MODE.ORDER]: "顺序播放",
       [PLAY_MODE.RANDOM]: "随机播放",
-      [PLAY_MODE.LOOP]: "单曲循环",
+      [PLAY_MODE.ONE_LOOP]: "单曲循环",
     }[mode.value] +
     " " +
     key
@@ -111,6 +128,9 @@ const progressMusicEnd = (percent) => {
 const modeChange = () => {
   const newMode = (mode.value + 1) % 4;
   setMode(newMode);
+  if (newMode === PLAY_MODE.ONE_LOOP) {
+    return;
+  }
 };
 
 // 上一首

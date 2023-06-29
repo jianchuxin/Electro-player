@@ -4,12 +4,12 @@ import { storeToRefs } from "pinia";
 import { ref } from "vue";
 const playlistStore = usePlayListStore();
 const { setPlaying } = playlistStore;
-const { audioEle, currentMusic, playList } = storeToRefs(playlistStore);
+const { audioEle, currentMusic } = storeToRefs(playlistStore);
 
 const userStore = useUserStore();
 const { addHistoryMusic } = userStore;
 
-let retry = 1; // 重试次数
+// let retry = 1; // 重试次数
 
 export const useMmPlayer = () => {
   // 与播放器相关
@@ -26,7 +26,7 @@ export const useMmPlayer = () => {
         if (audioEle.value.buffered.length > 0) {
           const duration = currentMusic.value.duration;
           let buffered = 0; //记录已缓冲时长
-          audioEle.value.buffered.end(0);
+          // audioEle.value.buffered.end(0);
           buffered =
             audioEle.value.buffered.end(0) > duration
               ? duration
@@ -48,7 +48,7 @@ export const useMmPlayer = () => {
 
     // 将能播放的音乐加入到播放历史列表中
     audioEle.value.oncanplay = () => {
-      retry = 1;
+      // retry = 1;
       addHistoryMusic(currentMusic.value);
     };
 
@@ -57,26 +57,26 @@ export const useMmPlayer = () => {
       currentTime.value = audioEle.value.currentTime;
     };
 
-    // 音乐播放完毕
-    audioEle.value.onended = () => {
-      //
-    };
+    // // 音乐播放完毕
+    // audioEle.value.onended = () => {
+    //   //
+    // };
 
     // 音乐播放出错
-    audioEle.value.onerror = () => {
-      if (retry === 0) {
-        alert("当前音乐不可播放，已自动播放下一首");
-        if (playList.value.length === 1) {
-          alert("暂时没有可播放的音乐哦~");
-        }
-        //next() 下一首
-      } else {
-        console.log("重试一次");
-        retry -= 1;
-        audioEle.value.src = currentMusic.url;
-        audioEle.value.load();
-      }
-    };
+    // audioEle.value.onerror = () => {
+    //   if (retry === 0) {
+    //     alert("当前音乐不可播放，已自动播放下一首");
+    //     if (playList.value.length === 1) {
+    //       alert("暂时没有可播放的音乐哦~");
+    //     }
+    //     //next() 下一首
+    //   } else {
+    //     console.log("重试一次");
+    //     retry -= 1;
+    //     audioEle.value.src = currentMusic.url;
+    //     audioEle.value.load();
+    //   }
+    // };
 
     // 音乐进度条拖动大于加载时重载音乐
     audioEle.onstalled = () => {
