@@ -29,7 +29,7 @@ export const getPlayListById = async (id) => {
 };
 
 // 获取歌曲详情
-const getSongDetail = (ids) => {
+export const getSongDetail = (ids) => {
   return request.get("/song/detail", {
     params: {
       ids,

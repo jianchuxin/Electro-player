@@ -2,10 +2,14 @@
 import MusicList from "@/components/musiclist/MusicList.vue";
 import MmLoading from "@/base/mmloading/MmLoading.vue";
 import { ref, onMounted } from "vue";
-import { getSearchHot, getSearchList } from "apis/musiclist";
+import { usePlayListStore } from "@/stores/playlist";
+import { getSongDetail, getSearchHot, getSearchList } from "apis/musiclist";
 import { formatSongs } from "@/utils/song";
 import { useLoading } from "@/composables/loading"; // 使用组合式函数代替mixins
 import { showToast } from "base/mmtoast/index";
+const playListStore = usePlayListStore();
+const { selectAddPlay } = playListStore;
+
 const searchValue = ref("");
 const searchHotWords = ref([]);
 const searchList = ref([]);
@@ -48,7 +52,8 @@ const onSearch = async () => {
   }
   const res = await getSearchList(searchValue.value);
   const result = res.result;
-  searchList.value = formatSongs(result.songs);
+  searchList.value = formatSongs(result.songs); //得到的数据中没有封面图，后面需要调用getSongDetail
+  // console.log(searchList.value);
   // loading end
   // 调用组合式函数--> @/composables/load.js
   hideLoad();
@@ -66,8 +71,16 @@ const pullUpLoad = async () => {
   searchList.value = [...searchList.value, ...formatSongs(result.songs)];
 };
 
-const selectItem = () => {
-  //
+const selectItem = async (music) => {
+  try {
+    const res = await getSongDetail(music.id);
+    console.log(res);
+    const picUrl = res.songs[0].al.picUrl;
+    music.image = picUrl;
+    selectAddPlay(music);
+  } catch (error) {
+    showToast({ message: "哎呀，出错了~" });
+  }
 };
 </script>
 
