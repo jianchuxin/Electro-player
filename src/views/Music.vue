@@ -8,14 +8,21 @@ import { storeToRefs } from "pinia";
 import { usePlayListStore } from "@/stores/playlist";
 import { useUserStore } from "@/stores/user";
 import { useMmPlayer } from "@/composables/player";
-import { formatSecond, silencePromise } from "@/utils/util";
+import { formatSecond, silencePromise, randomSortArray } from "@/utils/util";
 import { MMPLAYER_CONFIG, PLAY_MODE } from "@/config";
 
 // 引入store中的变量与函数
 const playListStore = usePlayListStore();
-const { setCurrentIndex, setPlaying, setMode } = playListStore;
-const { currentMusic, currentIndex, isPlaying, audioEle, playList, mode } =
-  storeToRefs(playListStore);
+const { setPlayList, setCurrentIndex, setPlaying, setMode } = playListStore;
+const {
+  currentMusic,
+  currentIndex,
+  isPlaying,
+  audioEle,
+  playList,
+  orderList,
+  mode,
+} = storeToRefs(playListStore);
 const userStore = useUserStore();
 const { setVolume } = userStore;
 const { volume } = storeToRefs(userStore); // 音量大小
@@ -128,9 +135,32 @@ const progressMusicEnd = (percent) => {
 const modeChange = () => {
   const newMode = (mode.value + 1) % 4;
   setMode(newMode);
+  console.log(newMode);
   if (newMode === PLAY_MODE.ONE_LOOP) {
     return;
   }
+  let list = [];
+  switch (newMode) {
+    case PLAY_MODE.LIST_LOOP:
+    case PLAY_MODE.ORDER:
+      console.log(orderList.value);
+      list = orderList.value;
+      break;
+    case PLAY_MODE.RANDOM:
+      console.log(999);
+      list = randomSortArray(orderList.value);
+      console.log(orderList.value);
+      break;
+  }
+  console.log(111);
+  resetCurrentIndex(list);
+  playList.value = list;
+};
+
+// 修改当前歌曲索引
+const resetCurrentIndex = (list) => {
+  const index = list.findIndex((item) => item.id === currentMusic.value.id);
+  setCurrentIndex(index);
 };
 
 // 上一首

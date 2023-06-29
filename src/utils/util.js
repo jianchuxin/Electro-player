@@ -1,3 +1,16 @@
+// 随机洗牌函数
+export const randomSortArray = (arr) => {
+  const result = arr.slice();
+  let n = result.length;
+  let random;
+  while (0 != n) {
+    // random = (Math.random() * n--) >>> 0;
+    random = Math.floor(Math.random() * n--);
+    [result[n], result[random]] = [result[random], result[n]];
+  }
+  return result;
+};
+
 // 时间格式化函数
 // 秒数 --> mm:ss
 export function formatSecond(seconds) {
