@@ -37,12 +37,21 @@ export const getSongDetail = (ids) => {
   });
 };
 
+// 获取歌曲的歌词
+export const getLyric = (id) => {
+  return request.get("/lyric", {
+    params: {
+      id,
+    },
+  });
+};
+
 // 热门搜索
 export const getSearchHot = () => {
   return request.get("/search/hot");
 };
-// 搜索歌曲
 
+// 搜索歌曲
 export const getSearchList = (keywords, page = 0, limit = 30) => {
   return request.get("/search", {
     params: {

@@ -8,9 +8,15 @@ import { storeToRefs } from "pinia";
 import { usePlayListStore } from "@/stores/playlist";
 import { useUserStore } from "@/stores/user";
 import { useMmPlayer } from "@/composables/player";
-import { formatSecond, silencePromise, randomSortArray } from "@/utils/util";
+import {
+  formatSecond,
+  silencePromise,
+  randomSortArray,
+  parseLyric,
+} from "@/utils/util";
 import { MMPLAYER_CONFIG, PLAY_MODE } from "@/config";
 import { showToast } from "base/mmtoast/index";
+import { getLyric } from "apis/musiclist";
 
 // 引入store中的变量与函数
 const playListStore = usePlayListStore();
@@ -26,12 +32,16 @@ const {
 } = storeToRefs(playListStore);
 const userStore = useUserStore();
 const { setVolume } = userStore;
-const { volume } = storeToRefs(userStore); // 音量大小
-const isMute = ref(false); // 是否静音
 
 // 与播放器进度相关变量和函数
+const { volume } = storeToRefs(userStore); // 音量大小
+const isMute = ref(false); // 是否静音
 const { musicReady, currentTime, currentProgress, initAudio } = useMmPlayer();
-// 歌词显示变量**********
+// 歌词显示变量
+const lyric = ref([]);
+const lyricVisible = ref(false);
+const nolyric = ref(false);
+const lyricIndex = ref(0);
 
 onMounted(() => {
   // instance.
@@ -96,6 +106,7 @@ const getModeTitle = computed(() => {
 // 切换歌曲
 watch(currentMusic, (newMusic, oldMusic) => {
   if (!newMusic.id) {
+    lyric.value = [];
     return;
   }
   if (newMusic.id === oldMusic.id) {
@@ -103,8 +114,10 @@ watch(currentMusic, (newMusic, oldMusic) => {
   }
   audioEle.value.src = newMusic.url;
   // 重置相关参数
-  currentProgress.value = 0;
+  lyricIndex.value = currentTime.value = currentProgress.value = 0;
   silencePromise(audioEle.value.play());
+  // nextTick??***********
+  getMusicLyric(newMusic.id);
 });
 // 播放 or 暂停
 watch(isPlaying, (newPlaying) => {
@@ -116,7 +129,25 @@ watch(isPlaying, (newPlaying) => {
 });
 
 // 歌词滚动
-
+watch(currentTime, (newTime, oldTime) => {
+  if (nolyric.value) {
+    return;
+  }
+  let start = 0;
+  let end = lyric.value.length - 1;
+  let index = lyricIndex.value;
+  if (newTime > oldTime) {
+    start = index;
+  } else {
+    end = index;
+  }
+  for (let i = start; i <= end; i++) {
+    if (lyric.value[i].time < newTime) {
+      index = i;
+    }
+  }
+  lyricIndex.value = index;
+});
 // 音量调节
 const volumeChange = (percent) => {
   isMute.value = percent === 0;
@@ -227,8 +258,11 @@ const loop = () => {
   audioEle.value.currentTime = 0;
   silencePromise(audioEle.value.play());
   setPlaying(true);
-  // 歌词循环 ********@@@@@@@@
+  if (lyric.value.length > 0) {
+    lyricIndex.value = 0;
+  }
 };
+
 // 键盘快捷键
 const initKeyDown = () => {
   document.onkeydown = (e) => {
@@ -266,6 +300,19 @@ const initKeyDown = () => {
     }
   };
 };
+
+// 获取歌词
+const getMusicLyric = async (id) => {
+  const res = await getLyric(id);
+  // console.log(res);
+  if (res.lrc && res.lrc.lyric) {
+    nolyric.value = false;
+    lyric.value = parseLyric(res.lrc.lyric);
+  } else {
+    nolyric.value = true;
+  }
+  // console.log(lyric.value);
+};
 </script>
 
 <template>
@@ -282,9 +329,14 @@ const initKeyDown = () => {
         </RouterView>
       </div>
       <!-- 右方歌词显示 -->
-      <div class="music-right">
-        <div class="close-lyric">关闭歌词</div>
-        <Lyric></Lyric>
+      <div class="music-right" :class="{ show: lyricVisible }">
+        <div class="close-lyric" @click="handleCloseLyric">关闭歌词</div>
+        <Lyric
+          ref="mmLyric"
+          :lyric="lyric"
+          :nolyric="nolyric"
+          :lyric-index="lyricIndex"
+        />
       </div>
     </div>
 
