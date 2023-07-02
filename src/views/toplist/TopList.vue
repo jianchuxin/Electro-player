@@ -54,7 +54,7 @@ const formatCount = (count) => {
           <div class="item-cover">
             <RouterLink :to="{ path: '/music/toplist' }">
               <img
-                :src="`${item.coverImgUrl}?param=300y300`"
+                v-img-lazy="`${item.coverImgUrl}?param=300y300`"
                 class="item-img"
                 alt="image"
               />
@@ -76,7 +76,7 @@ const formatCount = (count) => {
           <div class="item-cover">
             <RouterLink :to="{ path: '/music/toplist' }">
               <img
-                :src="`${item.picUrl}?param=300y300`"
+                v-img-lazy="`${item.picUrl}?param=300y300`"
                 class="item-img"
                 alt="image"
               />
@@ -143,6 +143,7 @@ const formatCount = (count) => {
         img {
           display: block;
           width: 100%;
+          transform: translate3d(0, 0, 0);
           transition: all 0.5s;
         }
         .cover-mask {
@@ -162,7 +163,7 @@ const formatCount = (count) => {
           width: 50px;
           height: 50px;
           margin: -25px;
-          transform: scale(0.9);
+          // transform: scale(0.9);
           // transform: translate(-50%, -50%);
           background-image: -webkit-image-set(
             url("assets/img/icon_play.png") 1x,
@@ -171,7 +172,6 @@ const formatCount = (count) => {
           opacity: 0;
           transition: all 0.5s;
         }
-
         &:hover {
           img {
             transform: scale(1.1);

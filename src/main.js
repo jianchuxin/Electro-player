@@ -5,6 +5,7 @@ import App from "./App.vue";
 import Icon from "base/mmicon/MmIcon.vue";
 import router from "./router";
 import "@/styles/index.less";
+import { lazyPlugin } from "./directives";
 
 const app = createApp(App);
 
@@ -22,5 +23,7 @@ app.directive("focus", {
 app.use(pinia);
 
 app.use(router);
+
+app.use(lazyPlugin);
 
 app.mount("#app");
