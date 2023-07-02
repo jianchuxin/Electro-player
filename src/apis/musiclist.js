@@ -1,3 +1,4 @@
+import { DEFAULT_LIMIT } from "@/config";
 import request from "@/utils/axios";
 import { formatSongs } from "@/utils/song";
 
@@ -37,10 +38,37 @@ export const getSongDetail = (ids) => {
   });
 };
 
+// 获取音乐是否可用
+export const getCheckMusic = (id) => {
+  return request.get("/check/music", {
+    params: { id },
+  });
+};
+
+// 获取音乐地址
+export const getMusicUrl = (id) => {
+  return request.get("/song/url", {
+    params: {
+      id,
+    },
+  });
+};
+
 // 获取歌曲的歌词
 export const getLyric = (id) => {
   return request.get("/lyric", {
     params: {
+      id,
+    },
+  });
+};
+
+// 获取音乐评论
+export const getComent = (id, page, limit = DEFAULT_LIMIT) => {
+  return request.get("/comment/music", {
+    params: {
+      offset: page * limit,
+      limit: limit,
       id,
     },
   });

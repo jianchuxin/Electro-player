@@ -5,12 +5,13 @@
       <dt>
         <img :src="picUrl" alt="img" />
       </dt>
-      <template v-if="true">
-        <dd>歌曲名：向云端</dd>
-        <dd>歌手名：小霞/海洋Bo</dd>
-        <dd>专辑名：向云端</dd>
+      <template v-if="currentMusic.id">
+        <dd>歌曲名：{{ currentMusic.name }}</dd>
+        <dd>歌手名：{{ currentMusic.singer }}</dd>
+        <dd>专辑名：{{ currentMusic.album }}</dd>
       </template>
       <template v-else>
+        <!-- ********** -->
         <dd>mmPlayer在线播放器</dd>
         <dd>
           <a href="#"> 项目主页 </a>

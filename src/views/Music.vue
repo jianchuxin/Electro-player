@@ -20,7 +20,7 @@ import { getLyric } from "apis/musiclist";
 
 // 引入store中的变量与函数
 const playListStore = usePlayListStore();
-const { setPlayList, setCurrentIndex, setPlaying, setMode } = playListStore;
+const { setCurrentIndex, setPlaying, setMode } = playListStore;
 const {
   currentMusic,
   currentIndex,
@@ -48,7 +48,6 @@ onMounted(() => {
   initAudio();
   // 播放结束
   audioEle.value.onended = () => {
-    console.log(mode.value);
     if (mode.value === PLAY_MODE.ONE_LOOP) {
       loop();
     } else {
@@ -176,16 +175,12 @@ const modeChange = () => {
   switch (newMode) {
     case PLAY_MODE.LIST_LOOP:
     case PLAY_MODE.ORDER:
-      console.log(orderList.value);
       list = orderList.value;
       break;
     case PLAY_MODE.RANDOM:
-      console.log(999);
       list = randomSortArray(orderList.value);
-      console.log(orderList.value);
       break;
   }
-  console.log(111);
   resetCurrentIndex(list);
   playList.value = list;
 };
@@ -304,14 +299,12 @@ const initKeyDown = () => {
 // 获取歌词
 const getMusicLyric = async (id) => {
   const res = await getLyric(id);
-  // console.log(res);
   if (res.lrc && res.lrc.lyric) {
     nolyric.value = false;
     lyric.value = parseLyric(res.lrc.lyric);
   } else {
     nolyric.value = true;
   }
-  // console.log(lyric.value);
 };
 </script>
 
