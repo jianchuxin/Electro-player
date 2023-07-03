@@ -8,6 +8,7 @@ import { storeToRefs } from "pinia";
 import { usePlayListStore } from "@/stores/playlist";
 import { useUserStore } from "@/stores/user";
 import { useMmPlayer } from "@/composables/player";
+import { useRoute } from "vue-router";
 import {
   formatSecond,
   silencePromise,
@@ -43,6 +44,8 @@ const lyricVisible = ref(false);
 const nolyric = ref(false);
 const lyricIndex = ref(0);
 
+// route
+const route = useRoute();
 onMounted(() => {
   // instance.
   initAudio();
@@ -316,10 +319,15 @@ const getMusicLyric = async (id) => {
       <div class="music-left flex-col">
         <MusicBtn />
         <RouterView class="router-view" v-slot="{ Component }">
-          <keep-alive>
+          <keep-alive exclude="Details,HistoryList,Comment">
             <component :is="Component" />
           </keep-alive>
         </RouterView>
+        <!-- <RouterView
+          :key="route.path"
+          class="router-view"
+        >
+        </RouterView> -->
       </div>
       <!-- 右方歌词显示 -->
       <div class="music-right" :class="{ show: lyricVisible }">

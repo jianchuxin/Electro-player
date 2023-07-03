@@ -9,23 +9,19 @@ const list = ref([]);
 const hotList = ref([]);
 
 onMounted(() => {
-  console.log("aaaaaaaaaaaaaaa");
   hideLoad();
   getTopList();
   getPersonalizedList();
-  console.log(isLoading.value);
 });
 
 const getTopList = async () => {
   const res = await getTopListDetail();
   list.value = res.list.filter((item) => item.ToplistType);
-  console.log(list.value);
 };
 
 const getPersonalizedList = async () => {
   const res = await getPersonalized();
   hotList.value = res.result.slice();
-  console.log(hotList.value);
 };
 
 const formatCount = (count) => {
@@ -52,7 +48,7 @@ const formatCount = (count) => {
           :title="`${item.name}-${item.updateFrequency}`"
         >
           <div class="item-cover">
-            <RouterLink :to="{ path: '/music/toplist' }">
+            <RouterLink :to="{ path: `/music/details/${item.id}` }">
               <img
                 v-img-lazy="`${item.coverImgUrl}?param=300y300`"
                 class="item-img"
@@ -74,7 +70,7 @@ const formatCount = (count) => {
           :title="item.name"
         >
           <div class="item-cover">
-            <RouterLink :to="{ path: '/music/toplist' }">
+            <RouterLink :to="{ path: `/music/details/${item.id}` }">
               <img
                 v-img-lazy="`${item.picUrl}?param=300y300`"
                 class="item-img"
