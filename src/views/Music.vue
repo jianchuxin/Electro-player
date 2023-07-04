@@ -8,7 +8,7 @@ import { storeToRefs } from "pinia";
 import { usePlayListStore } from "@/stores/playlist";
 import { useUserStore } from "@/stores/user";
 import { useMmPlayer } from "@/composables/player";
-import { useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 import {
   formatSecond,
   silencePromise,
@@ -44,8 +44,8 @@ const lyricVisible = ref(false);
 const nolyric = ref(false);
 const lyricIndex = ref(0);
 
-// route
-const route = useRoute();
+// router
+const router = useRouter();
 onMounted(() => {
   // instance.
   initAudio();
@@ -188,6 +188,15 @@ const modeChange = () => {
   playList.value = list;
 };
 
+// 打开歌曲评论页面
+const openComment = () => {
+  if (!currentMusic.value.id) {
+    showToast({ message: "还没有播放音乐哦", position: "bottom" });
+    return;
+  }
+  router.push(`/music/comment/${currentMusic.value.id}`);
+};
+
 // 修改当前歌曲索引
 const resetCurrentIndex = (list) => {
   const index = list.findIndex((item) => item.id === currentMusic.value.id);
@@ -323,11 +332,6 @@ const getMusicLyric = async (id) => {
             <component :is="Component" />
           </keep-alive>
         </RouterView>
-        <!-- <RouterView
-          :key="route.path"
-          class="router-view"
-        >
-        </RouterView> -->
       </div>
       <!-- 右方歌词显示 -->
       <div class="music-right" :class="{ show: lyricVisible }">
@@ -404,7 +408,13 @@ const getMusicLyric = async (id) => {
         ></MmIcon>
 
         <!-- 评论 -->
-        <MmIcon class="pointer" type="comment" title="评论" :size="24"></MmIcon>
+        <MmIcon
+          class="pointer"
+          @click="openComment"
+          type="comment"
+          title="评论"
+          :size="24"
+        ></MmIcon>
 
         <!-- 音量控制 -->
         <div class="music-bar-volume" title="音量加减 [Ctrl + Up / Down]">
