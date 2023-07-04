@@ -29,6 +29,9 @@ dependencies:
   vue-router:
     specifier: ^4.2.0
     version: 4.2.0(vue@3.3.2)
+  vue3-carousel-3d:
+    specifier: ^1.0.4
+    version: 1.0.4
 
 devDependencies:
   '@vitejs/plugin-vue':
@@ -1441,6 +1444,12 @@ packages:
       vue: ^3.2.0
     dependencies:
       '@vue/devtools-api': 6.5.0
+      vue: 3.3.2
+    dev: false
+
+  /vue3-carousel-3d@1.0.4:
+    resolution: {integrity: sha512-MqoaEYo94hfnHrs8UJzzeJX+30fbcHyn1qiSIzCdKefYcmSNmsssk8ahw/zL9D6zdrRySHTD5+vN+zGENPwlJw==}
+    dependencies:
       vue: 3.3.2
     dev: false
 

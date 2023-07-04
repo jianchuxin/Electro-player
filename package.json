@@ -16,7 +16,8 @@
     "pinia": "^2.0.36",
     "pinia-plugin-persistedstate": "^3.1.0",
     "vue": "^3.3.2",
-    "vue-router": "^4.2.0"
+    "vue-router": "^4.2.0",
+    "vue3-carousel-3d": "^1.0.4"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.2.3",
