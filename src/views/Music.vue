@@ -424,7 +424,7 @@ const getMusicLyric = async (id) => {
     </div>
 
     <!-- 遮罩-背景滤镜 -->
-    <div class="mmPlayer-bg"></div>
+    <div class="mmPlayer-bg" :style="{ backgroundImage: picUrl }"></div>
     <div class="mmPlayer-mask"></div>
   </div>
 </template>
@@ -436,7 +436,7 @@ const getMusicLyric = async (id) => {
   overflow-y: auto;
 }
 .music {
-  background-color: #333;
+  // background-color: #333;
   padding: 75px 25px 25px 25px;
   width: 100%;
   max-width: 1750px;
@@ -531,5 +531,29 @@ const getMusicLyric = async (id) => {
   }
 
   // 背景滤镜配置
+  .mmPlayer-bg,
+  .mmPlayer-mask {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+  }
+
+  .mmPlayer-mask {
+    z-index: -1;
+    background-color: @mask_color;
+  }
+
+  .mmPlayer-bg {
+    z-index: -2;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50%;
+    filter: blur(12px);
+    opacity: 0.7;
+    transition: all 0.8s;
+    transform: scale(1.1);
+  }
 }
 </style>

@@ -153,7 +153,6 @@ const getUserInfo = async (uid) => {
 
 <style lang="less" scoped>
 .mm-header {
-  background-color: #333;
   position: absolute;
   top: 0;
   left: 0;
