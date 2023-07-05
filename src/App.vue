@@ -27,6 +27,20 @@ onMounted(() => {
     usePlayList.setAudioEle(mmPlayer.value);
   });
 });
+
+// 首次加载动画后移除动画
+let loadDom = document.querySelector("#appLoading");
+if (loadDom) {
+  const animationendFunc = () => {
+    loadDom.removeEventListener("animationend", animationendFunc);
+    loadDom.removeEventListener("webkitAnimationEnd", animationendFunc);
+    document.body.removeChild(loadDom);
+    loadDom = null;
+  };
+  loadDom.addEventListener("animationend", animationendFunc);
+  loadDom.addEventListener("webkitAnimationEnd", animationendFunc);
+  loadDom.classList.add("removeAnimate");
+}
 </script>
 
 <template>

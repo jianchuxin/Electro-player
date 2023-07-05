@@ -2,7 +2,7 @@
   <!-- 歌单详情 -->
   <div class="details">
     <MmLoading :show="isLoading" />
-    <MusicList :list="list" @select="selectItem" />
+    <MusicList v-if="!isLoading" :list="list" @select="selectItem" />
   </div>
 </template>
 
