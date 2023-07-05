@@ -1,4 +1,5 @@
 <script setup>
+import MmNoResult from "base/mmnoresult/MmNoResult.vue";
 import { ref, computed, watch } from "vue";
 import { formatSecond } from "@/utils/util";
 import { usePlayListStore } from "@/stores/playlist";
@@ -145,8 +146,7 @@ defineExpose({ scrollToTop });
         <slot name="listBtn"></slot>
       </div>
     </template>
-
-    <template v-else>弄啥呢，空空如也~</template>
+    <MmNoResult v-else title="弄啥呢，空空如也~" />
   </div>
 </template>
 

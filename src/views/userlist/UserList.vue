@@ -1,11 +1,14 @@
 <script setup>
 import { Carousel3d, Slide } from "vue3-carousel-3d";
 import "vue3-carousel-3d/dist/index.css";
+import MmLoading from "@/base/mmloading/MmLoading.vue";
+import MmNoResult from "base/mmnoresult/MmNoResult.vue";
 import { ref, onMounted } from "vue";
 import { getUserPlayList } from "@/apis/userinfo";
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
+import { useLoading } from "@/composables/loading";
 
 const userStore = useUserStore();
 const { uid } = storeToRefs(userStore);
@@ -17,8 +20,11 @@ const starList = ref([]); // 我收藏的歌单
 const carousel = ref(null);
 const carouselStar = ref(null);
 
+const { isLoading, hideLoad } = useLoading();
+
 onMounted(() => {
   initialData();
+  hideLoad();
 });
 
 const initialData = async () => {
@@ -48,47 +54,54 @@ const gotoDetail = (opt) => {
 </script>
 
 <template>
-  <div class="userlist">
-    <div class="userlist-title">我创建的歌单</div>
-    <carousel-3d
-      v-if="myList.length > 0"
-      ref="carousel"
-      :count="myList.length"
-      :width="120"
-      :height="120"
-      :display="5"
-      controlsVisible="true"
-      :space="120"
-      :clickable="true"
-      :onMainSlideClick="() => gotoDetail(0)"
-    >
-      <slide v-for="(item, index) in myList" :key="index" :index="index">
-        <img v-img-lazy="item.coverImgUrl" alt="image" />
-        <p class="desc">《{{ item.name }}》</p>
-        <div class="mask"></div>
-      </slide>
-    </carousel-3d>
+  <MmLoading :show="isLoading" />
+  <template v-if="!isLoading && uid">
+    <div class="userlist">
+      <div class="userlist-title">我创建的歌单</div>
+      <carousel-3d
+        v-if="myList.length > 0"
+        ref="carousel"
+        :count="myList.length"
+        :width="120"
+        :height="120"
+        :display="5"
+        controlsVisible="true"
+        :space="120"
+        :clickable="true"
+        :onMainSlideClick="() => gotoDetail(0)"
+      >
+        <slide v-for="(item, index) in myList" :key="index" :index="index">
+          <img v-img-lazy="item.coverImgUrl" alt="image" />
+          <p class="desc">《{{ item.name }}》</p>
+          <div class="mask"></div>
+        </slide>
+      </carousel-3d>
 
-    <div class="userlist-title">我收藏的歌单</div>
-    <carousel-3d
-      v-if="starList.length > 0"
-      ref="carouselStar"
-      :count="starList.length"
-      :width="120"
-      :height="120"
-      :display="5"
-      controlsVisible="true"
-      :space="120"
-      :clickable="true"
-      :onMainSlideClick="() => gotoDetail(1)"
-    >
-      <slide v-for="(item, index) in starList" :key="index" :index="index">
-        <img v-img-lazy="item.coverImgUrl" alt="image" />
-        <p class="desc">《{{ item.name }}》</p>
-        <div class="mask"></div>
-      </slide>
-    </carousel-3d>
-  </div>
+      <div class="userlist-title">我收藏的歌单</div>
+      <carousel-3d
+        v-if="starList.length > 0"
+        ref="carouselStar"
+        :count="starList.length"
+        :width="120"
+        :height="120"
+        :display="5"
+        controlsVisible="true"
+        :space="120"
+        :clickable="true"
+        :onMainSlideClick="() => gotoDetail(1)"
+      >
+        <slide v-for="(item, index) in starList" :key="index" :index="index">
+          <img v-img-lazy="item.coverImgUrl" alt="image" />
+          <p class="desc">《{{ item.name }}》</p>
+          <div class="mask"></div>
+        </slide>
+      </carousel-3d>
+    </div>
+  </template>
+  <MmNoResult
+    v-else-if="!isLoading && !uid"
+    title="空空如也，快去登录看看吧~"
+  />
 </template>
 
 <style lang="less" scoped>
