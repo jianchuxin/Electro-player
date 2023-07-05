@@ -37,5 +37,28 @@
     }
   }
   //   @media;
+
+  @media (min-width: 960px) {
+    span.show-960 {
+      display: none;
+    }
+  }
+
+  @media (max-width: 960px) {
+    span.show-960 {
+      display: inline-block;
+    }
+  }
+
+  @media (max-width: 768px) {
+    height: 50px;
+    a,
+    span {
+      height: 35px;
+      padding: 0 10px;
+      margin-right: 6px;
+      line-height: 35px;
+    }
+  }
 }
 </style>

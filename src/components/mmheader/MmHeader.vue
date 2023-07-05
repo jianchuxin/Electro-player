@@ -158,7 +158,9 @@ const getUserInfo = async (uid) => {
   left: 0;
   width: 100%;
   height: 60px;
-  // media
+  @media (max-width: 768px) {
+    background-color: @header_bg_color;
+  }
 
   .header {
     .flex-center;
@@ -166,8 +168,13 @@ const getUserInfo = async (uid) => {
     color: @text_color_active;
     font-size: @font_size_large;
     // media
-
-    // vistor
+    @media (max-width: 768px) {
+      padding-left: 15px;
+      justify-content: flex-start;
+    }
+    @media (max-width: 414px) {
+      font-size: @font_size_medium;
+    }
   }
 
   .user {
@@ -199,7 +206,15 @@ const getUserInfo = async (uid) => {
         color: @text_color_active;
       }
     }
-    // @media
+
+    @media (max-width: 768px) {
+      &-info {
+        margin-right: 10px;
+        span {
+          display: none;
+        }
+      }
+    }
   }
 }
 

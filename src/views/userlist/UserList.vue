@@ -25,6 +25,7 @@ const { isLoading, hideLoad } = useLoading();
 onMounted(() => {
   initialData();
   hideLoad();
+  getDom();
 });
 
 const initialData = async () => {
@@ -37,6 +38,13 @@ const initialData = async () => {
       starList.value.push(item);
     }
   });
+};
+
+const getDom = () => {
+  setTimeout(() => {
+    const prev = document.querySelectorAll(".prev");
+    console.log(prev);
+  }, 500);
 };
 
 const gotoDetail = (opt) => {
@@ -54,9 +62,9 @@ const gotoDetail = (opt) => {
 </script>
 
 <template>
-  <MmLoading :show="isLoading" />
-  <template v-if="!isLoading && uid">
-    <div class="userlist">
+  <div class="userlist">
+    <MmLoading :show="isLoading" />
+    <template v-if="!isLoading && uid">
       <div class="userlist-title">我创建的歌单</div>
       <carousel-3d
         v-if="myList.length > 0"
@@ -96,12 +104,12 @@ const gotoDetail = (opt) => {
           <div class="mask"></div>
         </slide>
       </carousel-3d>
-    </div>
-  </template>
-  <MmNoResult
-    v-else-if="!isLoading && !uid"
-    title="空空如也，快去登录看看吧~"
-  />
+    </template>
+    <MmNoResult
+      v-else-if="!isLoading && !uid"
+      title="空空如也，快去登录看看吧~"
+    />
+  </div>
 </template>
 
 <style lang="less" scoped>
@@ -118,7 +126,9 @@ const gotoDetail = (opt) => {
   font-size: @font_size_large;
   color: @text_color;
 }
-.carousel-3d-container {
+
+// 修改轮播图子组件的样式，使用/deep/穿透
+/deep/ .carousel-3d-container {
   // min-height: 0;
   flex-shrink: 0;
   overflow: visible;
@@ -161,12 +171,11 @@ const gotoDetail = (opt) => {
         box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
       }
       .mask {
-        background-color: rgba(0, 0, 0, 0.2);
+        background-color: rgba(0, 0, 0, 0.15);
       }
     }
 
     &:not(.current) {
-      filter: blur(5px);
       .desc {
         display: none;
       }
@@ -176,7 +185,17 @@ const gotoDetail = (opt) => {
   .carousel-3d-controls {
     .prev,
     .next {
-      color: @text_color_active;
+      color: @text_color;
+
+      &:hover {
+        color: @text_color_active;
+      }
+    }
+  }
+
+  @media (max-width: 640px) {
+    .carousel-3d-controls {
+      display: none;
     }
   }
 }

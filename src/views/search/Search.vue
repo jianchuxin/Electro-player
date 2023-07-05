@@ -129,7 +129,11 @@ const selectItem = async (music) => {
       &:hover {
         color: @text_color_active;
       }
-      // @media
+      @media (max-width: 640px) {
+        & {
+          display: none;
+        }
+      }
     }
   }
   .search-input {

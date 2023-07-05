@@ -107,7 +107,11 @@ const cancel = () => {
             border-radius: @dialog_border_radius;
             background:@dialog_content_bg_color;
             animation: mm-dialog-zoom 0.3s;
-            // @media
+            @media (max-width: 767px) {
+            width: 270px;
+            border-radius: @dialog_mobile_border_radius;
+            text-align: center;
+            }
             .@{dialog-prefix-cls}-head{
                 padding: 15px;
                 padding-bottom: 0;
@@ -126,23 +130,40 @@ const cancel = () => {
                 align-items: center;
                 padding: 0 15px 10px;
                 color: @dialog_text_color;
-                div {
+                @media (min-width: 768px) {
+                  justify-content: flex-end;
+                  div {
                     display: block;
-                    padding: 8px  15px;
-                    border-radius: @border_radius_base;
+                    padding: 8px 15px;
+                    border-radius: @dialog_btn_mobile_border_radius;
                     border: 1px solid @btn_color;
                     font-size: @font_size_medium;
                     cursor: pointer;
-                    &:not(:nth-of-type(1)){
-                        margin-left: 10px;
+                    &:not(:nth-of-type(1)) {
+                      margin-left: 10px;
                     }
-                    &:hover{
-                        color: @text_color_active;
-                        border: 1px solid @btn_color_active;
+                    &:hover {
+                      color: @text_color_active;
+                      border: 1px solid @btn_color_active;
                     }
+                  }
                 }
-                // @media
-                // @meida
+                @media (max-width: 767px) {
+                  & {
+                    padding: 0;
+                    justify-content: center;
+                    div {
+                      flex: 1;
+                      line-height: 22px;
+                      padding: 10px 0;
+                      border-top: 1px solid @dialog_line_color;
+                      font-size: @font_size_large;
+                      &:not(:nth-of-type(1)) {
+                        border-left: 1px solid @dialog_line_color;
+                      }
+                    }
+                  }
+                }
             }
         }
     }

@@ -217,9 +217,14 @@ defineExpose({ scrollToTop });
   .list-artist,
   .list-album {
     display: block;
-    width: 150px;
+    width: 300px;
     .no-wrap();
-    // @media
+    @media (max-width: 1440px) {
+      width: 200px;
+    }
+    @media (max-width: 1200px) {
+      width: 150px;
+    }
   }
   .list-artist {
     width: 250px;
@@ -255,6 +260,38 @@ defineExpose({ scrollToTop });
     }
     .list-menu-icon-del {
       display: block;
+    }
+  }
+}
+
+@media (max-width: 960px) {
+  .list-item .list-name {
+    padding-right: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .list-item {
+    .list-name .list-menu {
+      display: block;
+    }
+
+    .list-artist,
+    .list-album {
+      width: 30%;
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  .list-item {
+    .list-artist {
+      width: 40%;
+    }
+
+    .list-album,
+    .list-time {
+      display: none;
     }
   }
 }

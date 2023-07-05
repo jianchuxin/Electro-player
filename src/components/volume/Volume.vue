@@ -66,5 +66,11 @@ const handleVolumeChange = (percent) => {
   &-progress-wrapper {
     flex: 1;
   }
+  @media (max-width: 768px) {
+    width: 36px;
+    .volume-progress-wrapper {
+      display: none;
+    }
+  }
 }
 </style>

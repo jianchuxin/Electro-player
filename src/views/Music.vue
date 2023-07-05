@@ -400,7 +400,7 @@ const getMusicLyric = async (id) => {
       <div class="options">
         <!-- 播放模式 -->
         <MmIcon
-          class="pointer"
+          class="pointer mode"
           :type="getModeType"
           :title="getModeTitle"
           :size="24"
@@ -409,7 +409,7 @@ const getMusicLyric = async (id) => {
 
         <!-- 评论 -->
         <MmIcon
-          class="pointer"
+          class="pointer comment"
           @click="openComment"
           type="comment"
           title="评论"
@@ -444,6 +444,7 @@ const getMusicLyric = async (id) => {
   height: 100%;
   box-sizing: border-box;
   overflow: hidden;
+
   .music-content {
     display: flex;
     flex: 1;
@@ -554,6 +555,56 @@ const getMusicLyric = async (id) => {
     opacity: 0.7;
     transition: all 0.8s;
     transform: scale(1.1);
+  }
+
+  // 当屏幕小于960时，右侧歌词组件消失
+  @media (max-width: 960px) {
+    .music-right {
+      display: none;
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 75px 15px 5px 15px;
+    .music-bar {
+      padding-top: 10px;
+      .music-bar-info span {
+        display: none;
+      }
+    }
+  }
+
+  @media (max-width: 520px) {
+    .music-bar {
+      position: relative;
+      flex-direction: column;
+      gap: 0;
+      .music-bar-btns {
+        order: 2;
+        width: 60%;
+        margin-top: 10px;
+      }
+
+      .music-music {
+        order: 1;
+        padding-left: 0;
+      }
+      .mode,
+      .comment {
+        position: absolute;
+        bottom: 23px;
+        margin: 0;
+      }
+      .mode {
+        left: 5px;
+      }
+      .comment {
+        right: 5px;
+      }
+      .music-bar-volume {
+        display: none;
+      }
+    }
   }
 }
 </style>
