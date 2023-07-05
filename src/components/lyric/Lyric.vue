@@ -101,6 +101,10 @@ onMounted(() => {
   });
   nextTick(() => calcTop());
 });
+
+defineExpose({
+  calcTop,
+});
 </script>
 
 <style lang="less" scoped>
@@ -183,6 +187,25 @@ onMounted(() => {
   }
   .music-lyric {
     top: 0;
+    .music-lyric-items {
+      line-height: 60px;
+      font-size: @font_size_large;
+    }
+  }
+}
+
+@media (min-width: 960px) {
+  .pure {
+    .music-info {
+      display: none;
+    }
+    .music-lyric {
+      top: 0;
+      .music-lyric-items {
+        line-height: 40px;
+        font-size: @font_size_medium;
+      }
+    }
   }
 }
 </style>

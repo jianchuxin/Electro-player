@@ -44,6 +44,20 @@ const lyricVisible = ref(false);
 const nolyric = ref(false);
 const lyricIndex = ref(0);
 
+const mmLyric = ref(null);
+
+// 纯净模式相关
+const isPure = ref(false);
+const openPure = () => {
+  isPure.value = !isPure.value;
+  nextTick(() => {
+    mmLyric.value.calcTop();
+  });
+};
+const getPureModeType = computed(() => {
+  return isPure.value ? "pureopen" : "pureclose";
+});
+
 // router
 const router = useRouter();
 onMounted(() => {
@@ -188,6 +202,19 @@ const modeChange = () => {
   playList.value = list;
 };
 
+// 查看歌词
+const handleOpenLyric = () => {
+  lyricVisible.value = true;
+  nextTick(() => {
+    mmLyric.value.calcTop();
+  });
+};
+
+// 关闭歌词
+const handleCloseLyric = () => {
+  lyricVisible.value = false;
+};
+
 // 打开歌曲评论页面
 const openComment = () => {
   if (!currentMusic.value.id) {
@@ -326,7 +353,7 @@ const getMusicLyric = async (id) => {
     <div class="music-content">
       <!-- 左方歌曲列表显示 -->
       <div class="music-left flex-col">
-        <MusicBtn />
+        <MusicBtn @onClickLyric="handleOpenLyric" />
         <RouterView class="router-view" v-slot="{ Component }">
           <keep-alive exclude="Details,HistoryList,Comment">
             <component :is="Component" />
@@ -334,7 +361,7 @@ const getMusicLyric = async (id) => {
         </RouterView>
       </div>
       <!-- 右方歌词显示 -->
-      <div class="music-right" :class="{ show: lyricVisible }">
+      <div class="music-right" :class="{ show: lyricVisible, pure: isPure }">
         <div class="close-lyric" @click="handleCloseLyric">关闭歌词</div>
         <Lyric
           ref="mmLyric"
@@ -414,6 +441,15 @@ const getMusicLyric = async (id) => {
           type="comment"
           title="评论"
           :size="24"
+        ></MmIcon>
+
+        <!-- 切换纯净模式 -->
+        <MmIcon
+          class="pointer pure-mode"
+          @click="openPure"
+          :type="getPureModeType"
+          title="纯净模式"
+          :size="28"
         ></MmIcon>
 
         <!-- 音量控制 -->
@@ -557,9 +593,30 @@ const getMusicLyric = async (id) => {
     transform: scale(1.1);
   }
 
-  // 当屏幕小于960时，右侧歌词组件消失
+  @media (min-width: 960px) {
+    .close-lyric {
+      display: none;
+    }
+    .music-right {
+      &.pure {
+        display: block;
+        width: 100%;
+        margin-left: 0;
+      }
+    }
+  }
+
+  // 当屏幕小于960时，右侧歌词组件消失，纯净模式按钮消失
   @media (max-width: 960px) {
     .music-right {
+      display: none;
+      &.show {
+        display: block;
+        margin-left: 0;
+        width: 100%;
+      }
+    }
+    .pure-mode {
       display: none;
     }
   }
