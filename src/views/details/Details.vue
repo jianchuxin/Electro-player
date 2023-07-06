@@ -22,7 +22,7 @@ const initializeList = async () => {
   try {
     const id = route.params.id;
     const res = await getPlayListById(id);
-    document.title = `${res.name} - mmPlayer在线音乐播放器`;
+    document.title = `${res.name} - Electro 在线音乐播放器`;
     list.value = res.tracks;
     hideLoad();
   } catch (err) {
