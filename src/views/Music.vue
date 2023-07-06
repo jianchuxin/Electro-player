@@ -83,12 +83,18 @@ onMounted(() => {
   initKeyDown();
 });
 
+// 从初始的三张背景图中导入一张
+const getRandomUrl = () => {
+  const num = Math.floor(Math.random() * 3) + 1;
+  return new URL(`../assets/background/bg-${num}.jpg`, import.meta.url);
+};
+
 // 歌曲封面图片300X300
 const picUrl = computed(() => {
   const url =
     currentMusic.value.id && currentMusic.value.image
       ? `${currentMusic.value.image}?param=300y300`
-      : `${ELECTROPLAYER_CONFIG.BACKGROUND}`;
+      : getRandomUrl();
   console.log(url);
   return url;
 });
