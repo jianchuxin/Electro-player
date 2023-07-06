@@ -8,7 +8,6 @@ const __dirnameNew = path.dirname(__filenameNew);
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: "/Electro-player/",
   plugins: [vue()],
   resolve: {
     alias: {
