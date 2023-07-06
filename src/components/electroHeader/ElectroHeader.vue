@@ -73,7 +73,7 @@ const getUserInfo = async (uid) => {
   userInfo.value.avatarUrl = toHttps(userInfo.value.avatarUrl);
   setTimeout(() => {
     showToast({
-      message: `${userInfo.value.nickname} 欢迎使用 mmPlayer`,
+      message: `${userInfo.value.nickname} 欢迎使用 Electro Player`,
       position: "top",
     });
   }, 200);

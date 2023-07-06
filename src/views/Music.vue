@@ -15,7 +15,7 @@ import {
   randomSortArray,
   parseLyric,
 } from "@/utils/util";
-import { ELECTROPLAYER_CONFIG, PLAY_MODE } from "@/config";
+import { PLAY_MODE } from "@/config";
 import { showToast } from "base/electroToast/index";
 import { getLyric } from "apis/musiclist";
 
