@@ -166,16 +166,15 @@ const getUserInfo = async (uid) => {
     .flex-center;
     font-style: italic;
     line-height: 60px;
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 800;
-    // color: @text_color_active;
     color: transparent;
-    background: url("assets/slideImg/universe.jpg");
+    background: url("assets/slideImg/silver.jpg");
     background-position: 100% 100%;
-    text-align: cneter;
+    text-align: center;
     background-clip: text;
     -webkit-background-clip: text;
-    animation: slideImg 50s linear infinite alternate-reverse forwards;
+    animation: slide-img 10s linear infinite alternate-reverse forwards;
 
     // media
     @media (max-width: 768px) {
@@ -250,7 +249,7 @@ const getUserInfo = async (uid) => {
   }
 }
 
-@keyframes slideImg {
+@keyframes slide-img {
   0% {
     background-position: 0 50%;
   }
