@@ -87,8 +87,8 @@ onMounted(() => {
 const picUrl = computed(() => {
   const url =
     currentMusic.value.id && currentMusic.value.image
-      ? `url(${currentMusic.value.image}?param=300y300)`
-      : `url(${ELECTROPLAYER_CONFIG.BACKGROUND})`;
+      ? `${currentMusic.value.image}?param=300y300`
+      : `${ELECTROPLAYER_CONFIG.BACKGROUND}`;
   console.log(url);
   return url;
 });
@@ -463,7 +463,10 @@ const getMusicLyric = async (id) => {
     </div>
 
     <!-- 遮罩-背景滤镜 -->
-    <div class="electroPlayer-bg" :style="{ backgroundImage: picUrl }"></div>
+    <div
+      class="electroPlayer-bg"
+      :style="{ backgroundImage: 'url(' + picUrl + ')' }"
+    ></div>
     <div class="electroPlayer-mask"></div>
   </div>
 </template>
