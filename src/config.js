@@ -10,11 +10,12 @@ export const UPDATE_TIME = dayjs().locale("zh-cn").format("YYYY-MM-DD"); //版�
 export const VISITOR_BADGE_ID = import.meta.env.VUE_APP_VISITOR_BADGE_ID;
 
 /* 背景图（可引入网络图或本地静态图） *********  */
-const modules = import.meta.glob("assets/background/*.*");
+const modules = import.meta.globEager("assets/background/*.*");
 export const BACKGROUNDS = [];
 for (const path in modules) {
   BACKGROUNDS.push(path);
 }
+console.log(BACKGROUNDS);
 
 /**
  * 播放模式

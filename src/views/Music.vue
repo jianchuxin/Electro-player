@@ -85,9 +85,12 @@ onMounted(() => {
 
 // 歌曲封面图片300X300
 const picUrl = computed(() => {
-  return currentMusic.value.id && currentMusic.value.image
-    ? `url(${currentMusic.value.image}?param=300y300)`
-    : `url(${ELECTROPLAYER_CONFIG.BACKGROUND})`;
+  const url =
+    currentMusic.value.id && currentMusic.value.image
+      ? `url(${currentMusic.value.image}?param=300y300)`
+      : `url(${ELECTROPLAYER_CONFIG.BACKGROUND})`;
+  console.log(url);
+  return url;
 });
 // 播放进度百分比
 const percentMusic = computed(() => {
