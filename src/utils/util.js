@@ -68,3 +68,10 @@ export function silencePromise(value) {
     value.then(null, () => {});
   }
 }
+
+export const toHttps = (url) => {
+  if (typeof url !== "string") {
+    return url;
+  }
+  return url.replace("http://", "https://");
+};

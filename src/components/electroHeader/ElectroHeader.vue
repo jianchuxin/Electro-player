@@ -5,6 +5,7 @@ import { getUserPlayList } from "apis/userinfo";
 import { storeToRefs } from "pinia";
 import { ref, computed, onMounted } from "vue";
 import { showToast } from "base/electroToast/index";
+import { toHttps } from "@/utils/util";
 
 const userStore = useUserStore();
 const { uid } = storeToRefs(userStore);
@@ -69,6 +70,7 @@ const getUserInfo = async (uid) => {
   }
   userInfo.value = playlist[0].creator;
   setUid(uid);
+  userInfo.value.avatarUrl = toHttps(userInfo.value.avatarUrl);
   setTimeout(() => {
     showToast({
       message: `${userInfo.value.nickname} 欢迎使用 mmPlayer`,
@@ -81,7 +83,9 @@ const getUserInfo = async (uid) => {
 <template>
   <header class="electro-header">
     <h1 class="header">
-      <a href="#" target="_blank">Electro 在线音乐播放器</a>
+      <a href="https://github.com/jianchuxin/Electro-player" target="_blank"
+        >Electro 在线音乐播放器</a
+      >
       <!-- 页面累计访问数 -->
       <!-- <img src="" alt=""> -->
     </h1>

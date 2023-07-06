@@ -7,6 +7,7 @@ import { getSongDetail, getSearchHot, getSearchList } from "apis/musiclist";
 import { formatSongs } from "@/utils/song";
 import { useLoading } from "@/composables/loading"; // 使用组合式函数代替mixins
 import { showToast } from "base/electroToast/index";
+import { toHttps } from "@/utils/util";
 const playListStore = usePlayListStore();
 const { selectAddPlay } = playListStore;
 
@@ -75,7 +76,7 @@ const selectItem = async (music) => {
     const res = await getSongDetail(music.id);
     console.log(res);
     const picUrl = res.songs[0].al.picUrl;
-    music.image = picUrl;
+    music.image = toHttps(picUrl);
     selectAddPlay(music);
   } catch (error) {
     showToast({ message: "哎呀，出错了~" });

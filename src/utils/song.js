@@ -1,3 +1,4 @@
+import { toHttps } from "./util";
 export class Song {
   constructor({ id, name, singer, album, image, duration, url }) {
     this.id = id;
@@ -25,7 +26,7 @@ const createSong = (music) => {
     name: music.name,
     singer: getSingers(music.ar || music.artists),
     album: album.name,
-    image: album.picUrl,
+    image: toHttps(album.picUrl) || null,
     duration: duration / 1000,
     url: `https://music.163.com/song/media/outer/url?id=${music.id}.mp3 `,
   });
