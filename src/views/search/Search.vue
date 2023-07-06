@@ -1,12 +1,12 @@
 <script setup>
 import MusicList from "@/components/musiclist/MusicList.vue";
-import MmLoading from "@/base/mmloading/MmLoading.vue";
+import ElectroLoading from "@/base/electroLoading/ElectroLoading.vue";
 import { ref, onMounted } from "vue";
 import { usePlayListStore } from "@/stores/playlist";
 import { getSongDetail, getSearchHot, getSearchList } from "apis/musiclist";
 import { formatSongs } from "@/utils/song";
 import { useLoading } from "@/composables/loading"; // 使用组合式函数代替mixins
-import { showToast } from "base/mmtoast/index";
+import { showToast } from "base/electroToast/index";
 const playListStore = usePlayListStore();
 const { selectAddPlay } = playListStore;
 
@@ -53,7 +53,6 @@ const onSearch = async () => {
   const res = await getSearchList(searchValue.value);
   const result = res.result;
   searchList.value = formatSongs(result.songs); //得到的数据中没有封面图，后面需要调用getSongDetail
-  // console.log(searchList.value);
   // loading end
   // 调用组合式函数--> @/composables/load.js
   hideLoad();
@@ -86,7 +85,7 @@ const selectItem = async (music) => {
 
 <template>
   <div class="search flex-col">
-    <MmLoading :show="isLoading" />
+    <ElectroLoading :show="isLoading" />
     <div class="search-head">
       <span
         v-for="(item, index) in searchHotWords"

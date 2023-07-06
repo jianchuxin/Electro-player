@@ -1,8 +1,8 @@
 <script setup>
 import { Carousel3d, Slide } from "vue3-carousel-3d";
 import "vue3-carousel-3d/dist/index.css";
-import MmLoading from "@/base/mmloading/MmLoading.vue";
-import MmNoResult from "base/mmnoresult/MmNoResult.vue";
+import ElectroLoading from "@/base/electroLoading/ElectroLoading.vue";
+import ElectroNoResult from "base/electroNoResult/ElectroNoResult.vue";
 import { ref, onMounted } from "vue";
 import { getUserPlayList } from "@/apis/userinfo";
 import { useUserStore } from "@/stores/user";
@@ -55,7 +55,7 @@ const gotoDetail = (opt) => {
 
 <template>
   <div class="userlist">
-    <MmLoading :show="isLoading" />
+    <ElectroLoading :show="isLoading" />
     <template v-if="!isLoading && uid">
       <div class="userlist-title">我创建的歌单</div>
       <carousel-3d
@@ -97,7 +97,7 @@ const gotoDetail = (opt) => {
         </slide>
       </carousel-3d>
     </template>
-    <MmNoResult
+    <ElectroNoResult
       v-else-if="!isLoading && !uid"
       title="空空如也，快去登录看看吧~"
     />
@@ -120,7 +120,7 @@ const gotoDetail = (opt) => {
 }
 
 // 修改轮播图子组件的样式，使用/deep/穿透
-/deep/ .carousel-3d-container {
+:deep(.carousel-3d-container) {
   flex-shrink: 0;
   overflow: visible;
   margin: 0 0 40px 0;

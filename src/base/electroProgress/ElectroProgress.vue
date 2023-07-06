@@ -21,14 +21,14 @@ const move = ref({
   left: 0,
 });
 
-const mmProgress = ref(null);
-const mmProgressPlay = ref(null);
-const mmProgressLoad = ref(null);
+const electroProgress = ref(null);
+const electroProgressPlay = ref(null);
+const electroProgressLoad = ref(null);
 
 onMounted(() => {
   // 绑定事件，鼠标键盘事件
   bindEvents();
-  const barWidth = mmProgress.value.clientWidth - dotWidth;
+  const barWidth = electroProgress.value.clientWidth - dotWidth;
   const offsetWidth = props.percent * barWidth;
   moveSlide(offsetWidth);
 });
@@ -55,13 +55,13 @@ const unbindEvents = () => {
 
 // 移动进度条圆点
 const moveSlide = (offsetWidth) => {
-  mmProgressPlay.value.style.width = offsetWidth + "px";
+  electroProgressPlay.value.style.width = offsetWidth + "px";
 };
 
 // 向父组件传递信息 1. 拖动或点击完成 2. 正在拖动中
 const commitPercent = (isEnd = false) => {
-  const lineWidth = mmProgress.value.clientWidth - dotWidth;
-  const percent = mmProgressPlay.value.clientWidth / lineWidth;
+  const lineWidth = electroProgress.value.clientWidth - dotWidth;
+  const percent = electroProgressPlay.value.clientWidth / lineWidth;
   emit(isEnd ? "percentChangeEnd" : "percentChange", percent);
 };
 
@@ -69,7 +69,7 @@ watch(
   () => props.percent,
   (newPercent) => {
     if (newPercent >= 0 && !move.value.isDragging) {
-      const innerWidth = mmProgress.value.clientWidth - dotWidth;
+      const innerWidth = electroProgress.value.clientWidth - dotWidth;
       const offsetWidth = newPercent * innerWidth;
       moveSlide(offsetWidth);
     }
@@ -80,17 +80,17 @@ watch(
 watch(
   () => props.percentLoad,
   (newPercentLoad) => {
-    const innerWidth = mmProgress.value.clientWidth - dotWidth;
+    const innerWidth = electroProgress.value.clientWidth - dotWidth;
     const offsetWidth = newPercentLoad * innerWidth;
-    mmProgressLoad.value.style.width = offsetWidth + "px";
+    electroProgressLoad.value.style.width = offsetWidth + "px";
   }
 );
 
 // 鼠标点击事件
 const barClick = (e) => {
-  const rect = mmProgressPlay.value.getBoundingClientRect();
+  const rect = electroProgressPlay.value.getBoundingClientRect();
   const offsetWidth = Math.min(
-    mmProgress.value.clientWidth - dotWidth,
+    electroProgress.value.clientWidth - dotWidth,
     Math.max(0, e.clientX - rect.left)
   );
   moveSlide(offsetWidth);
@@ -101,7 +101,7 @@ const barClick = (e) => {
 const barDown = (e) => {
   move.value.isDragging = true;
   move.value.startX = e.clientX || e.touches[0].pageX;
-  move.value.left = mmProgressPlay.value.clientWidth;
+  move.value.left = electroProgressPlay.value.clientWidth;
 };
 
 // 鼠标处于拖动中，
@@ -113,7 +113,7 @@ const barMove = (e) => {
   let endX = e.clientX || e.touches[0].pageX;
   let dist = endX - move.value.startX;
   let offsetWidth = Math.min(
-    mmProgress.value.clientWidth - dotWidth,
+    electroProgress.value.clientWidth - dotWidth,
     Math.max(0, move.value.left + dist)
   );
   moveSlide(offsetWidth);
@@ -130,29 +130,29 @@ const barUp = () => {
 </script>
 
 <template>
-  <div ref="mmProgress" class="mmProgress" @click="barClick">
-    <div class="mmProgress-inner">
-      <div ref="mmProgressLoad" class="mmProgress-load"></div>
-      <div ref="mmProgressPlay" class="mmProgress-play">
-        <div class="mmProgress-dot" @mousedown="barDown"></div>
+  <div ref="electroProgress" class="electroProgress" @click="barClick">
+    <div class="electroProgress-inner">
+      <div ref="electroProgressLoad" class="electroProgress-load"></div>
+      <div ref="electroProgressPlay" class="electroProgress-play">
+        <div class="electroProgress-dot" @mousedown="barDown"></div>
       </div>
     </div>
   </div>
 </template>
 
 <style lang="less" scoped>
-.mmProgress {
+.electroProgress {
   position: relative;
   padding: 5px;
   user-select: none;
   cursor: pointer;
   overflow: hidden;
-  .mmProgress-inner {
+  .electroProgress-inner {
     height: 2px;
     width: 100%;
     background: @bar_color;
   }
-  .mmProgress-load {
+  .electroProgress-load {
     position: absolute;
     top: 50%;
     left: 5px;
@@ -163,7 +163,7 @@ const barUp = () => {
     background: rgba(255, 255, 255, 0.2);
   }
 
-  .mmProgress-play {
+  .electroProgress-play {
     position: absolute;
     top: 50%;
     left: 5px;
@@ -172,7 +172,7 @@ const barUp = () => {
     height: 2px;
     margin-top: -1px;
     background: @line_color;
-    .mmProgress-dot {
+    .electroProgress-dot {
       position: absolute;
       top: 50%;
       right: -5px;

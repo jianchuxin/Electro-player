@@ -33,7 +33,7 @@ export const PLAY_MODE = {
 /**
  * 播放器默认配置
  */
-export const MMPLAYER_CONFIG = {
+export const ELECTROPLAYER_CONFIG = {
   /**
    * 默认歌单ID （正在播放列表）
    * 默认为云音乐热歌榜 https://music.163.com/#/discover/toplist?id=3778678

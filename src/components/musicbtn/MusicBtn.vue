@@ -38,7 +38,6 @@ defineEmits(["onClickLyric"]);
       color: @btn_color_active;
     }
   }
-  //   @media;
 
   @media (min-width: 960px) {
     span.show-960 {

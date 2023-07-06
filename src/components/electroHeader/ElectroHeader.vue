@@ -1,10 +1,10 @@
 <script setup>
-import MmDialog from "base/mmdialog/MmDialog.vue";
+import ElectroDialog from "base/electroDialog/ElectroDialog.vue";
 import { useUserStore } from "@/stores/user";
 import { getUserPlayList } from "apis/userinfo";
 import { storeToRefs } from "pinia";
 import { ref, computed, onMounted } from "vue";
-import { showToast } from "base/mmtoast/index";
+import { showToast } from "base/electroToast/index";
 
 const userStore = useUserStore();
 const { uid } = storeToRefs(userStore);
@@ -79,9 +79,9 @@ const getUserInfo = async (uid) => {
 </script>
 
 <template>
-  <header class="mm-header">
+  <header class="electro-header">
     <h1 class="header">
-      <a href="#" target="_blank">mmPlayer 在线音乐播放器</a>
+      <a href="#" target="_blank">Electro 在线音乐播放器</a>
       <!-- 页面累计访问数 -->
       <!-- <img src="" alt=""> -->
     </h1>
@@ -100,18 +100,18 @@ const getUserInfo = async (uid) => {
     </dl>
 
     <!-- 登录弹窗 -->
-    <MmDialog
+    <ElectroDialog
       ref="loginDialog"
       head-text="登录"
       confirm-btn-text="登录"
       cancel-btn-text="关闭"
       @confirm="login"
     >
-      <div class="mm-dialog-text">
+      <div class="electro-dialog-text">
         <input
           type="number"
           v-model.trim="uidValue"
-          class="mm-dialog-input"
+          class="electro-dialog-input"
           placeholder="请输入您的网易云 UID"
           v-focus
           @keyup.enter="login"
@@ -120,16 +120,16 @@ const getUserInfo = async (uid) => {
       <template #btn>
         <div @click="opendialog('help')">帮助</div>
       </template>
-    </MmDialog>
+    </ElectroDialog>
     <!-- 帮助弹窗 -->
-    <MmDialog
+    <ElectroDialog
       ref="helpDialog"
       head-text="登录帮助"
       confirm-btn-text="去登录"
       cancel-btn-text="关闭"
       @confirm="opendialog('login')"
     >
-      <div class="mm-dialog-text">
+      <div class="electro-dialog-text">
         <p>
           1、
           <a target="_blank" href="https://music.163.com"
@@ -141,18 +141,18 @@ const getUserInfo = async (uid) => {
         <p>3、点击您的头像，进入我的主页</p>
         <p>4、复制浏览器地址栏 /user/home?id= 后面的数字（网易云 UID）</p>
       </div>
-    </MmDialog>
+    </ElectroDialog>
     <!-- 退出弹窗 -->
-    <MmDialog
+    <ElectroDialog
       ref="logoutDialog"
       body-text="确定退出当前用户吗？"
       @confirm="logout"
-    ></MmDialog>
+    ></ElectroDialog>
   </header>
 </template>
 
 <style lang="less" scoped>
-.mm-header {
+.electro-header {
   position: absolute;
   top: 0;
   left: 0;
@@ -164,9 +164,19 @@ const getUserInfo = async (uid) => {
 
   .header {
     .flex-center;
+    font-style: italic;
     line-height: 60px;
-    color: @text_color_active;
-    font-size: @font_size_large;
+    font-size: 18px;
+    font-weight: 800;
+    // color: @text_color_active;
+    color: transparent;
+    background: url("assets/slideImg/universe.jpg");
+    background-position: 100% 100%;
+    text-align: cneter;
+    background-clip: text;
+    -webkit-background-clip: text;
+    animation: slideImg 50s linear infinite alternate-reverse forwards;
+
     // media
     @media (max-width: 768px) {
       padding-left: 15px;
@@ -218,10 +228,9 @@ const getUserInfo = async (uid) => {
   }
 }
 
-// dialog
-.mm-dialog-text {
+.electro-dialog-text {
   text-align: left;
-  .mm-dialog-input {
+  .electro-dialog-input {
     width: 100%;
     height: 40px;
     box-sizing: border-box;
@@ -238,6 +247,15 @@ const getUserInfo = async (uid) => {
   }
   a:hover {
     color: #d43c33;
+  }
+}
+
+@keyframes slideImg {
+  0% {
+    background-position: 0 50%;
+  }
+  100% {
+    background-position: 70% 75%;
   }
 }
 </style>

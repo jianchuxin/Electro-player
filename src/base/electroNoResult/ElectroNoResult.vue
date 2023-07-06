@@ -1,7 +1,7 @@
 <template>
   <!--暂无数据提示-->
-  <div class="mm-no-result">
-    <p class="mm-no-result-text">{{ title }}</p>
+  <div class="electro-no-result">
+    <p class="electro-no-result-text">{{ title }}</p>
   </div>
 </template>
 
@@ -15,7 +15,7 @@ defineProps({
 </script>
 
 <style lang="less" scoped>
-.mm-no-result {
+.electro-no-result {
   display: flex;
   justify-content: center;
   align-items: center;

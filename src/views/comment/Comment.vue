@@ -1,100 +1,5 @@
-<template>
-  <div class="comment" @scroll="listScroll">
-    <MmLoading :show="isLoading" />
-    <dl v-if="hotComments.length > 0" class="comment-list">
-      <!-- 精彩评论 -->
-      <dt class="comment-title">精彩评论</dt>
-      <dd
-        v-for="item in hotComments"
-        :key="item.commentId"
-        class="comment-item"
-      >
-        <a :href="getUserLink(item)" target="_blank">
-          <img
-            v-img-lazy="getAvatarUrl(item)"
-            class="comment-item-pic"
-            alt="userImg"
-          />
-        </a>
-        <h4 class="comment-item-title">
-          <a :href="getUserLink(item)" target="_blank">{{
-            item.user.nickname
-          }}</a>
-        </h4>
-        <div class="comment-item-date">
-          {{ item.timeStr }}&nbsp;&nbsp;来自{{ item.ipLocation.location }}
-        </div>
-        <p class="comment-item-disc">
-          {{ item.content }}
-        </p>
-        <div class="comment-item-opt">
-          <div class="comment-opt-liked">
-            <MmIcon class="like-icon" type="like" />
-            {{ item.likedCount }}
-          </div>
-        </div>
-        <div
-          v-for="beReplied in item.beReplied"
-          :key="beReplied.user.userId"
-          class="comment-item-replied"
-        >
-          <a :href="getUserLink(beReplied)" target="_blank">{{
-            beReplied.user.nickname
-          }}</a>
-          ：{{ beReplied.content }}
-        </div>
-      </dd>
-    </dl>
-
-    <dl v-if="commentList.length > 0" class="comment-list">
-      <!-- 最新评论 -->
-      <dt class="comment-title">最新评论（{{ total }}）</dt>
-      <dd
-        v-for="item in commentList"
-        :key="item.commentId"
-        class="comment-item"
-      >
-        <a :href="getUserLink(item)" target="_blank">
-          <img
-            v-img-lazy="getAvatarUrl(item)"
-            class="comment-item-pic"
-            alt="userImg"
-          />
-        </a>
-        <h4 class="comment-item-title">
-          <a :href="getUserLink(item)" target="_blank">{{
-            item.user.nickname
-          }}</a>
-        </h4>
-        <div class="comment-item-date">
-          {{ item.timeStr }}&nbsp;&nbsp;来自{{ item.ipLocation.location }}
-        </div>
-        <p class="comment-item-disc">
-          {{ item.content }}
-        </p>
-        <div class="comment-item-opt">
-          <div class="comment-opt-liked">
-            <MmIcon class="like-icon" type="like" />
-            {{ item.likedCount }}
-          </div>
-        </div>
-        <div
-          v-for="beReplied in item.beReplied"
-          :key="beReplied.user.userId"
-          class="comment-item-replied"
-        >
-          <a :href="getUserLink(item)" target="_blank">{{
-            beReplied.user.nickname
-          }}</a>
-          ：{{ beReplied.content }}
-        </div>
-      </dd>
-    </dl>
-  </div>
-</template>
-
 <script setup>
-import MmLoading from "@/base/mmloading/MmLoading.vue";
+import ElectroLoading from "@/base/electroLoading/ElectroLoading.vue";
 import { getComent } from "@/apis/musiclist";
 import { useLoading } from "@/composables/loading";
 import { ref, onMounted } from "vue";
@@ -159,6 +64,101 @@ const pullUpLoad = async () => {
   commentList.value = [...commentList.value, ...res.comments];
 };
 </script>
+
+<template>
+  <div class="comment" @scroll="listScroll">
+    <ElectroLoading :show="isLoading" />
+    <dl v-if="hotComments.length > 0" class="comment-list">
+      <!-- 精彩评论 -->
+      <dt class="comment-title">精彩评论</dt>
+      <dd
+        v-for="item in hotComments"
+        :key="item.commentId"
+        class="comment-item"
+      >
+        <a :href="getUserLink(item)" target="_blank">
+          <img
+            v-img-lazy="getAvatarUrl(item)"
+            class="comment-item-pic"
+            alt="userImg"
+          />
+        </a>
+        <h4 class="comment-item-title">
+          <a :href="getUserLink(item)" target="_blank">{{
+            item.user.nickname
+          }}</a>
+        </h4>
+        <div class="comment-item-date">
+          {{ item.timeStr }}&nbsp;&nbsp;来自{{ item.ipLocation.location }}
+        </div>
+        <p class="comment-item-disc">
+          {{ item.content }}
+        </p>
+        <div class="comment-item-opt">
+          <div class="comment-opt-liked">
+            <ElectroIcon class="like-icon" type="like" />
+            {{ item.likedCount }}
+          </div>
+        </div>
+        <div
+          v-for="beReplied in item.beReplied"
+          :key="beReplied.user.userId"
+          class="comment-item-replied"
+        >
+          <a :href="getUserLink(beReplied)" target="_blank">{{
+            beReplied.user.nickname
+          }}</a>
+          ：{{ beReplied.content }}
+        </div>
+      </dd>
+    </dl>
+
+    <dl v-if="commentList.length > 0" class="comment-list">
+      <!-- 最新评论 -->
+      <dt class="comment-title">最新评论（{{ total }}）</dt>
+      <dd
+        v-for="item in commentList"
+        :key="item.commentId"
+        class="comment-item"
+      >
+        <a :href="getUserLink(item)" target="_blank">
+          <img
+            v-img-lazy="getAvatarUrl(item)"
+            class="comment-item-pic"
+            alt="userImg"
+          />
+        </a>
+        <h4 class="comment-item-title">
+          <a :href="getUserLink(item)" target="_blank">{{
+            item.user.nickname
+          }}</a>
+        </h4>
+        <div class="comment-item-date">
+          {{ item.timeStr }}&nbsp;&nbsp;来自{{ item.ipLocation.location }}
+        </div>
+        <p class="comment-item-disc">
+          {{ item.content }}
+        </p>
+        <div class="comment-item-opt">
+          <div class="comment-opt-liked">
+            <ElectroIcon class="like-icon" type="like" />
+            {{ item.likedCount }}
+          </div>
+        </div>
+        <div
+          v-for="beReplied in item.beReplied"
+          :key="beReplied.user.userId"
+          class="comment-item-replied"
+        >
+          <a :href="getUserLink(item)" target="_blank">{{
+            beReplied.user.nickname
+          }}</a>
+          ：{{ beReplied.content }}
+        </div>
+      </dd>
+    </dl>
+  </div>
+</template>
 
 <style lang="less" scoped>
 .comment {

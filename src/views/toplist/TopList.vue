@@ -1,5 +1,5 @@
 <script setup>
-import MmLoading from "base/mmloading/MmLoading.vue";
+import ElectroLoading from "base/electroLoading/ElectroLoading.vue";
 import { ref, onMounted } from "vue";
 import { getTopListDetail, getPersonalized } from "@/apis/toplist";
 import { useLoading } from "@/composables/loading";
@@ -37,7 +37,7 @@ const formatCount = (count) => {
 
 <template>
   <div class="topList">
-    <MmLoading :show="isLoading" />
+    <ElectroLoading :show="isLoading" />
     <template v-if="!isLoading">
       <div class="topList-head">云音乐特色榜</div>
       <ul class="topList-content">

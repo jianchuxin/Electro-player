@@ -1,5 +1,5 @@
 <script setup>
-import MmNoResult from "base/mmnoresult/MmNoResult.vue";
+import ElectroNoResult from "base/electroNoResult/ElectroNoResult.vue";
 import { ref, computed, watch } from "vue";
 import { formatSecond } from "@/utils/util";
 import { usePlayListStore } from "@/stores/playlist";
@@ -39,7 +39,6 @@ watch(
     if (props.listType !== "pullUp") {
       return;
     }
-    // lockUp.value = false;
     if (newList.length !== oldList.length) {
       lockUp.value = false;
     } else if (newList[newList.length - 1].id !== oldList[oldList.length - 1]) {
@@ -121,7 +120,7 @@ defineExpose({ scrollToTop });
           <div class="list-num" v-text="index + 1"></div>
           <div class="list-name">
             <span class="list-name-text">{{ item.name }}</span>
-            <MmIcon
+            <ElectroIcon
               :type="getStateType(item)"
               :size="32"
               class="hover list-menu-icon"
@@ -133,7 +132,7 @@ defineExpose({ scrollToTop });
             <span class="list-time-format">{{
               getFormatTime(item.duration % 3600)
             }}</span>
-            <MmIcon
+            <ElectroIcon
               type="delete"
               :size="32"
               class="hover list-menu-icon-del"
@@ -146,7 +145,7 @@ defineExpose({ scrollToTop });
         <slot name="listBtn"></slot>
       </div>
     </template>
-    <MmNoResult v-else title="弄啥呢，空空如也~" />
+    <ElectroNoResult v-else title="弄啥呢，空空如也~" />
   </div>
 </template>
 
@@ -182,7 +181,6 @@ defineExpose({ scrollToTop });
 
   &.on {
     color: #fff;
-
     .list-num {
       font-size: 0;
       background: url("assets/img/wave.gif") no-repeat center center;
@@ -248,7 +246,6 @@ defineExpose({ scrollToTop });
 .list-item:hover {
   .list-name {
     padding-right: 80px;
-
     .list-menu-icon {
       display: block;
     }
@@ -275,7 +272,6 @@ defineExpose({ scrollToTop });
     .list-name .list-menu {
       display: block;
     }
-
     .list-artist,
     .list-album {
       width: 30%;
@@ -288,7 +284,6 @@ defineExpose({ scrollToTop });
     .list-artist {
       width: 40%;
     }
-
     .list-album,
     .list-time {
       display: none;

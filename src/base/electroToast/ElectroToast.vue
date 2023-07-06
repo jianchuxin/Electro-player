@@ -1,5 +1,5 @@
 <template>
-  <div class="mm-toast" :class="positionClass">
+  <div class="electro-toast" :class="positionClass">
     {{ props.message }}
   </div>
 </template>
@@ -18,12 +18,12 @@ const props = defineProps({
 });
 
 const positionClass = computed(() => {
-  return "mm-toast-" + props.position;
+  return "electro-toast-" + props.position;
 });
 </script>
 
 <style lang="less">
-@prefix-cls: mm-toast;
+@prefix-cls: electro-toast;
 
 .@{prefix-cls} {
   position: fixed;

@@ -1,5 +1,5 @@
 import { h, render } from "vue";
-import Toast from "./MmToast.vue";
+import Toast from "./ElectroToast.vue";
 
 const defaultOptions = {
   duration: 1500,
@@ -14,8 +14,8 @@ export class ToastCreator {
   }
 
   present() {
-    const mmToast = h(h(Toast), this.options);
-    render(mmToast, this.container);
+    const electroToast = h(h(Toast), this.options);
+    render(electroToast, this.container);
     document.body.insertBefore(this.container, document.body.firstChild);
 
     // 到时间消失

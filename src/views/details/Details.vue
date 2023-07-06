@@ -1,13 +1,5 @@
-<template>
-  <!-- 歌单详情 -->
-  <div class="details">
-    <MmLoading :show="isLoading" />
-    <MusicList v-if="!isLoading" :list="list" @select="selectItem" />
-  </div>
-</template>
-
 <script setup>
-import MmLoading from "base/mmloading/MmLoading.vue";
+import ElectroLoading from "base/electroLoading/ElectroLoading.vue";
 import MusicList from "components/musiclist/MusicList.vue";
 import { useLoading } from "@/composables/loading";
 import { getPlayListById } from "@/apis/musiclist";
@@ -44,6 +36,14 @@ const selectItem = (item, index) => {
   selectPlay({ list: list.value, index });
 };
 </script>
+
+<template>
+  <!-- 歌单详情 -->
+  <div class="details">
+    <ElectroLoading :show="isLoading" />
+    <MusicList v-if="!isLoading" :list="list" @select="selectItem" />
+  </div>
+</template>
 
 <style lang="less" scoped>
 .details {

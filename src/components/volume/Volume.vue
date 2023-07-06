@@ -1,5 +1,5 @@
 <script setup>
-import MmProgress from "base/mmprogress/MmProgress.vue";
+import ElectroProgress from "base/electroProgress/ElectroProgress.vue";
 import { ref, computed } from "vue";
 
 const props = defineProps({
@@ -38,14 +38,14 @@ const handleVolumeChange = (percent) => {
 
 <template>
   <div class="volume">
-    <MmIcon
+    <ElectroIcon
       class="pointer volume-icon"
       :type="volumeType"
       :size="30"
       @click="toggleType"
     />
     <div class="volume-progress-wrapper">
-      <MmProgress
+      <ElectroProgress
         :percent="volumeProgress"
         @percentChangeEnd="handleVolumeChange"
         @percentChange="handleVolumeChange"

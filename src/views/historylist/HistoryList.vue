@@ -1,12 +1,11 @@
 <script setup>
 import MusicList from "@/components/musiclist/MusicList.vue";
-import MmDialog from "@/base/mmdialog/MmDialog.vue";
+import ElectroDialog from "@/base/electroDialog/ElectroDialog.vue";
 import { useUserStore } from "@/stores/user";
 import { usePlayListStore } from "@/stores/playlist";
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
-import { showToast } from "base/mmtoast/index";
-// import { useRouter } from "vue-router";
+import { showToast } from "base/electroToast/index";
 
 const userStore = useUserStore();
 const { historyList } = storeToRefs(userStore);
@@ -20,8 +19,6 @@ const showDialog = () => {
   clearDialog.value?.show();
 };
 
-// const router = useRouter();
-
 // 清空列表
 const clearList = () => {
   clearHistoryList();
@@ -31,7 +28,6 @@ const clearList = () => {
 // 选择播放，将播放列表改为历史列表
 const selectItem = (item, index) => {
   selectPlay({ list: historyList.value, index });
-  // router.push("/");
 };
 
 // 删除事件
@@ -54,7 +50,7 @@ const deleteItem = (index) => {
         </div>
       </template>
     </MusicList>
-    <MmDialog
+    <ElectroDialog
       ref="clearDialog"
       body-text="是否清空播放历史列表"
       confirm-btn-text="清空"

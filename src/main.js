@@ -2,7 +2,7 @@ import { createApp } from "vue";
 import { createPinia } from "pinia";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 import App from "./App.vue";
-import Icon from "base/mmicon/MmIcon.vue";
+import Icon from "base/electroIcon/ElectroIcon.vue";
 import router from "./router";
 import "@/styles/index.less";
 import { lazyPlugin } from "./directives";

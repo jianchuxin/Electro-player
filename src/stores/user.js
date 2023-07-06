@@ -1,6 +1,6 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
-import { MMPLAYER_CONFIG } from "@/config";
+import { ELECTROPLAYER_CONFIG } from "@/config";
 
 // 正在播放列表
 export const useUserStore = defineStore(
@@ -8,7 +8,7 @@ export const useUserStore = defineStore(
   () => {
     const uid = ref("");
     const historyList = ref([]);
-    const volume = ref(MMPLAYER_CONFIG.VOLUME);
+    const volume = ref(ELECTROPLAYER_CONFIG.VOLUME);
     const HISTORYLIST_MAX_LENGTH = 200;
 
     // 设置登录用户uid

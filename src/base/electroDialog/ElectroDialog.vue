@@ -53,23 +53,23 @@ const cancel = () => {
 
 <template>
   <Teleport to="body">
-    <div v-if="dialogShow" class="mm-dialog-box">
-      <div class="mm-dialog-wrapper">
-        <div class="mm-dialog-content">
-          <div class="mm-dialog-head" v-text="headText"></div>
+    <div v-if="dialogShow" class="electro-dialog-box">
+      <div class="electro-dialog-wrapper">
+        <div class="electro-dialog-content">
+          <div class="electro-dialog-head" v-text="headText"></div>
           <slot>
-            <div class="mm-dialog-text" v-html="bodyText"></div>
+            <div class="electro-dialog-text" v-html="bodyText"></div>
           </slot>
-          <div class="mm-dialog-btns">
+          <div class="electro-dialog-btns">
             <div
               v-if="type.toLowerCase() !== 'alert'"
-              class="mm-btn-cancel"
+              class="electro-btn-cancel"
               v-text="cancelBtnText"
               @click="cancel"
             ></div>
             <slot name="btn"></slot>
             <div
-              class="mm-btn-confirm"
+              class="electro-btn-confirm"
               v-text="confirmBtnText"
               @click="confirm"
             ></div>
@@ -82,7 +82,7 @@ const cancel = () => {
 
 <style lang="less">
 
-@dialog-prefix-cls: mm-dialog;
+@dialog-prefix-cls: electro-dialog;
 
 .@{dialog-prefix-cls}-box{
     position: fixed;
@@ -95,7 +95,7 @@ const cancel = () => {
     user-select: none;
     backdrop-filter: @backdrop_filter;
     // 动画
-    animation:mm-dialog-fadein 0.3s;
+    animation:electro-dialog-fadein 0.3s;
     .@{dialog-prefix-cls}-wrapper{
         position: absolute;
         top: 50%;
@@ -106,7 +106,7 @@ const cancel = () => {
             width: 420px;
             border-radius: @dialog_border_radius;
             background:@dialog_content_bg_color;
-            animation: mm-dialog-zoom 0.3s;
+            animation: electro-dialog-zoom 0.3s;
             @media (max-width: 767px) {
             width: 270px;
             border-radius: @dialog_mobile_border_radius;
@@ -169,7 +169,7 @@ const cancel = () => {
     }
 }
 
-@keyframes mm-dialog-fadein{
+@keyframes electro-dialog-fadein{
     0%{
         opacity: 0;
     }
@@ -178,7 +178,7 @@ const cancel = () => {
     }
 }
 
-@keyframes mm-dialog-zoom{
+@keyframes electro-dialog-zoom{
     0%{
         transform: scale(0);
     }

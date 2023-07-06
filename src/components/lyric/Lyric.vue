@@ -12,9 +12,12 @@
       </template>
       <template v-else>
         <!-- ********** -->
-        <dd>mmPlayer在线播放器</dd>
+        <dd>Electro 在线播放器</dd>
         <dd>
-          <a href="#"> 项目主页 </a>
+          <a class="hover" target="_blank" href="https://github.com/jianchuxin">
+            <ElectroIcon type="github" :size="14" />
+            merrickJ
+          </a>
         </dd>
       </template>
     </dl>

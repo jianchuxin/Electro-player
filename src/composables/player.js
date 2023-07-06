@@ -5,38 +5,15 @@ import { ref } from "vue";
 const playlistStore = usePlayListStore();
 const { setPlaying } = playlistStore;
 const { audioEle, currentMusic } = storeToRefs(playlistStore);
-
 const userStore = useUserStore();
 const { addHistoryMusic } = userStore;
-
-// let retry = 1; // 重试次数
 
 export const useMmPlayer = () => {
   // 与播放器相关
   const musicReady = ref(false);
   const currentTime = ref(0);
   const currentProgress = ref(0);
-  // 歌词显示
-  //   const isMute = ref(false);
-  //   const volume = ref(0.8);
   const initAudio = () => {
-    // 音频缓冲
-    audioEle.value.onprogress = () => {
-      try {
-        if (audioEle.value.buffered.length > 0) {
-          const duration = currentMusic.value.duration;
-          let buffered = 0; //记录已缓冲时长
-          // audioEle.value.buffered.end(0);
-          buffered =
-            audioEle.value.buffered.end(0) > duration
-              ? duration
-              : audioEle.value.buffered.end(0);
-          currentProgress.value = buffered / duration;
-        }
-      } catch (e) {
-        //
-      }
-    };
     // 音频开始播放
     audioEle.value.onplay = () => {
       let timer;
@@ -46,10 +23,26 @@ export const useMmPlayer = () => {
       }, 100);
     };
 
-    // 将能播放的音乐加入到播放历史列表中
-    audioEle.value.oncanplay = () => {
-      // retry = 1;
-      addHistoryMusic(currentMusic.value);
+    // 音频缓冲
+    audioEle.value.onprogress = () => {
+      try {
+        if (audioEle.value.buffered.length > 0) {
+          const duration = currentMusic.value.duration;
+          let buffered = 0; //记录已缓冲时长
+          buffered =
+            audioEle.value.buffered.end(0) > duration
+              ? duration
+              : audioEle.value.buffered.end(0);
+          currentProgress.value = buffered / duration;
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    // 当音频暂停时
+    audioEle.onpause = () => {
+      setPlaying(false);
     };
 
     // 播放时间递增
@@ -57,26 +50,10 @@ export const useMmPlayer = () => {
       currentTime.value = audioEle.value.currentTime;
     };
 
-    // // 音乐播放完毕
-    // audioEle.value.onended = () => {
-    //   //
-    // };
-
-    // 音乐播放出错
-    // audioEle.value.onerror = () => {
-    //   if (retry === 0) {
-    //     alert("当前音乐不可播放，已自动播放下一首");
-    //     if (playList.value.length === 1) {
-    //       alert("暂时没有可播放的音乐哦~");
-    //     }
-    //     //next() 下一首
-    //   } else {
-    //     console.log("重试一次");
-    //     retry -= 1;
-    //     audioEle.value.src = currentMusic.url;
-    //     audioEle.value.load();
-    //   }
-    // };
+    // 将能播放的音乐加入到播放历史列表中
+    audioEle.value.oncanplay = () => {
+      addHistoryMusic(currentMusic.value);
+    };
 
     // 音乐进度条拖动大于加载时重载音乐
     audioEle.onstalled = () => {
@@ -88,12 +65,6 @@ export const useMmPlayer = () => {
         setPlaying(true);
       }, 10);
     };
-
-    // 当音频暂停时
-    audioEle.onpause = () => {
-      setPlaying(false);
-    };
-    // 将能播放的音乐加入播放历史 *****
   };
 
   return { musicReady, currentTime, currentMusic, currentProgress, initAudio };

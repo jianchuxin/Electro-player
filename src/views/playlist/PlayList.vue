@@ -1,10 +1,10 @@
 <script setup>
 import MusicList from "components/musiclist/MusicList.vue";
-import MmDialog from "base/mmdialog/MmDialog.vue";
+import ElectroDialog from "base/electroDialog/ElectroDialog.vue";
 import { usePlayListStore } from "@/stores/playlist";
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
-import { showToast } from "base/mmtoast/index";
+import { showToast } from "base/electroToast/index";
 const playListStore = usePlayListStore();
 const { currentMusic, playList } = storeToRefs(playListStore);
 const { setPlaying, setCurrentIndex, clearPlayList, deletePlayListMusic } =
@@ -47,7 +47,7 @@ const deleteItem = (index) => {
         </div>
       </template>
     </MusicList>
-    <MmDialog
+    <ElectroDialog
       ref="clearDialog"
       body-text="是否清空播放历史列表"
       confirm-btn-text="清空"

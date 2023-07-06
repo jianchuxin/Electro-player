@@ -1,7 +1,7 @@
 <script setup>
 import Lyric from "components/lyric/Lyric.vue";
 import MusicBtn from "components/musicbtn/MusicBtn.vue";
-import MmProgress from "base/mmprogress/MmProgress.vue";
+import ElectroProgress from "base/electroProgress/ElectroProgress.vue";
 import Volume from "components/volume/Volume.vue";
 import { ref, watch, computed, onMounted, nextTick } from "vue";
 import { storeToRefs } from "pinia";
@@ -15,8 +15,8 @@ import {
   randomSortArray,
   parseLyric,
 } from "@/utils/util";
-import { MMPLAYER_CONFIG, PLAY_MODE } from "@/config";
-import { showToast } from "base/mmtoast/index";
+import { ELECTROPLAYER_CONFIG, PLAY_MODE } from "@/config";
+import { showToast } from "base/electroToast/index";
 import { getLyric } from "apis/musiclist";
 
 // 引入store中的变量与函数
@@ -44,14 +44,14 @@ const lyricVisible = ref(false);
 const nolyric = ref(false);
 const lyricIndex = ref(0);
 
-const mmLyric = ref(null);
+const electroLyric = ref(null);
 
 // 纯净模式相关
 const isPure = ref(false);
 const openPure = () => {
   isPure.value = !isPure.value;
   nextTick(() => {
-    mmLyric.value.calcTop();
+    electroLyric.value.calcTop();
   });
 };
 const getPureModeType = computed(() => {
@@ -87,7 +87,7 @@ onMounted(() => {
 const picUrl = computed(() => {
   return currentMusic.value.id && currentMusic.value.image
     ? `url(${currentMusic.value.image}?param=300y300)`
-    : `url(${MMPLAYER_CONFIG.BACKGROUND})`;
+    : `url(${ELECTROPLAYER_CONFIG.BACKGROUND})`;
 });
 // 播放进度百分比
 const percentMusic = computed(() => {
@@ -206,7 +206,7 @@ const modeChange = () => {
 const handleOpenLyric = () => {
   lyricVisible.value = true;
   nextTick(() => {
-    mmLyric.value.calcTop();
+    electroLyric.value.calcTop();
   });
 };
 
@@ -364,7 +364,7 @@ const getMusicLyric = async (id) => {
       <div class="music-right" :class="{ show: lyricVisible, pure: isPure }">
         <div class="close-lyric" @click="handleCloseLyric">关闭歌词</div>
         <Lyric
-          ref="mmLyric"
+          ref="electroLyric"
           :lyric="lyric"
           :nolyric="nolyric"
           :lyric-index="lyricIndex"
@@ -379,27 +379,27 @@ const getMusicLyric = async (id) => {
     >
       <div class="music-bar-btns">
         <!-- icon -->
-        <MmIcon
+        <ElectroIcon
           type="prev"
           :size="24"
           class="pointer"
           title="上一曲 Ctrl + Left"
           @click="prev"
-        ></MmIcon>
+        ></ElectroIcon>
         <div class="control-play pointer" title="播放暂停 Ctrl + Space">
-          <MmIcon
+          <ElectroIcon
             :type="isPlaying ? 'pause-bold' : 'play-bold'"
             :size="20"
             @click="play"
-          ></MmIcon>
+          ></ElectroIcon>
         </div>
-        <MmIcon
+        <ElectroIcon
           type="next"
           :size="24"
           class="pointer"
           title="下一曲 Ctrl + Right"
           @click="next"
-        ></MmIcon>
+        ></ElectroIcon>
       </div>
       <div class="music-music">
         <div class="music-bar-info">
@@ -407,7 +407,7 @@ const getMusicLyric = async (id) => {
             {{ currentMusic.name }}
             <span>-{{ currentMusic.singer }}</span>
           </template>
-          <template v-else>欢迎使用mmPlayer在线音乐播放器</template>
+          <template v-else>欢迎使用 Electro 在线音乐播放器</template>
         </div>
         <div v-if="currentMusic.id" class="music-bar-time">
           {{ formatSecond(currentTime) }}/{{
@@ -415,7 +415,7 @@ const getMusicLyric = async (id) => {
           }}
         </div>
         <!-- 播放进度条 -->
-        <MmProgress
+        <ElectroProgress
           class="music-progress"
           :percent="percentMusic"
           :percent-load="currentProgress"
@@ -426,31 +426,31 @@ const getMusicLyric = async (id) => {
 
       <div class="options">
         <!-- 播放模式 -->
-        <MmIcon
+        <ElectroIcon
           class="pointer mode"
           :type="getModeType"
           :title="getModeTitle"
           :size="24"
           @click="modeChange"
-        ></MmIcon>
+        ></ElectroIcon>
 
         <!-- 评论 -->
-        <MmIcon
+        <ElectroIcon
           class="pointer comment"
           @click="openComment"
           type="comment"
           title="评论"
           :size="24"
-        ></MmIcon>
+        ></ElectroIcon>
 
         <!-- 切换纯净模式 -->
-        <MmIcon
+        <ElectroIcon
           class="pointer pure-mode"
           @click="openPure"
           :type="getPureModeType"
           title="纯净模式"
           :size="28"
-        ></MmIcon>
+        ></ElectroIcon>
 
         <!-- 音量控制 -->
         <div class="music-bar-volume" title="音量加减 [Ctrl + Up / Down]">
@@ -460,8 +460,8 @@ const getMusicLyric = async (id) => {
     </div>
 
     <!-- 遮罩-背景滤镜 -->
-    <div class="mmPlayer-bg" :style="{ backgroundImage: picUrl }"></div>
-    <div class="mmPlayer-mask"></div>
+    <div class="electroPlayer-bg" :style="{ backgroundImage: picUrl }"></div>
+    <div class="electroPlayer-mask"></div>
   </div>
 </template>
 
@@ -504,7 +504,7 @@ const getMusicLyric = async (id) => {
     }
   }
 
-  // 底部mmPlayer-bar
+  // 底部electroPlayer-bar
   .music-bar {
     display: flex;
     gap: 40px;
@@ -568,8 +568,8 @@ const getMusicLyric = async (id) => {
   }
 
   // 背景滤镜配置
-  .mmPlayer-bg,
-  .mmPlayer-mask {
+  .electroPlayer-bg,
+  .electroPlayer-mask {
     position: absolute;
     top: 0;
     right: 0;
@@ -577,12 +577,12 @@ const getMusicLyric = async (id) => {
     bottom: 0;
   }
 
-  .mmPlayer-mask {
+  .electroPlayer-mask {
     z-index: -1;
     background-color: @mask_color;
   }
 
-  .mmPlayer-bg {
+  .electroPlayer-bg {
     z-index: -2;
     background-repeat: no-repeat;
     background-size: cover;

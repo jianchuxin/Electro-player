@@ -1,7 +1,7 @@
 <script>
 import { h } from "vue";
 export default {
-  name: "MmIcon",
+  name: "ElectroIcon",
   props: {
     type: {
       type: String,
