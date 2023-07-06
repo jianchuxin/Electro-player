@@ -3,7 +3,7 @@ import { Carousel3d, Slide } from "vue3-carousel-3d";
 import "vue3-carousel-3d/dist/index.css";
 import ElectroLoading from "@/base/electroLoading/ElectroLoading.vue";
 import ElectroNoResult from "base/electroNoResult/ElectroNoResult.vue";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { getUserPlayList } from "@/apis/userinfo";
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
@@ -23,8 +23,22 @@ const carouselStar = ref(null);
 const { isLoading, hideLoad } = useLoading();
 
 onMounted(() => {
-  initialData();
-  hideLoad();
+  if (uid.value) {
+    isLoading.value = true;
+    initialData();
+  } else {
+    hideLoad();
+  }
+});
+
+watch(uid, (newUid) => {
+  if (newUid) {
+    isLoading.value = true;
+    initialData();
+  } else {
+    myList.value = [];
+    starList.value = [];
+  }
 });
 
 const initialData = async () => {
@@ -37,6 +51,7 @@ const initialData = async () => {
       starList.value.push(item);
     }
   });
+  hideLoad();
 };
 
 const gotoDetail = (opt) => {

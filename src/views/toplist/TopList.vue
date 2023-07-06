@@ -9,7 +9,6 @@ const list = ref([]);
 const hotList = ref([]);
 
 onMounted(() => {
-  hideLoad();
   getTopList();
   getPersonalizedList();
 });
@@ -22,6 +21,7 @@ const getTopList = async () => {
 const getPersonalizedList = async () => {
   const res = await getPersonalized();
   hotList.value = res.result.slice();
+  hideLoad();
 };
 
 const formatCount = (count) => {
