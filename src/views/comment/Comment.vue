@@ -25,7 +25,6 @@ watch(commentList, (newList, oldList) => {
 
 onMounted(() => {
   initialData();
-  hideLoad();
 });
 
 const initialData = async () => {
@@ -33,6 +32,7 @@ const initialData = async () => {
   hotComments.value = res.hotComments;
   commentList.value = res.comments;
   total.value = res.total;
+  hideLoad();
 };
 
 // 用户头像
