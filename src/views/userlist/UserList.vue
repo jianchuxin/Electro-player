@@ -72,45 +72,47 @@ const gotoDetail = (opt) => {
   <div class="userlist">
     <ElectroLoading :show="isLoading" />
     <template v-if="!isLoading && uid">
-      <div class="userlist-title">我创建的歌单</div>
-      <carousel-3d
-        v-if="myList.length > 0"
-        ref="carousel"
-        :count="myList.length"
-        :width="120"
-        :height="120"
-        :display="5"
-        controlsVisible="true"
-        :space="120"
-        :clickable="true"
-        :onMainSlideClick="() => gotoDetail(0)"
-      >
-        <slide v-for="(item, index) in myList" :key="index" :index="index">
-          <img v-img-lazy="item.coverImgUrl" alt="image" />
-          <p class="desc">《{{ item.name }}》</p>
-          <div class="mask"></div>
-        </slide>
-      </carousel-3d>
+      <div class="user-create" v-if="myList.length > 0">
+        <div class="userlist-title">我创建的歌单</div>
+        <carousel-3d
+          ref="carousel"
+          :count="myList.length"
+          :width="120"
+          :height="120"
+          :display="5"
+          controlsVisible="true"
+          :space="120"
+          :clickable="true"
+          :onMainSlideClick="() => gotoDetail(0)"
+        >
+          <slide v-for="(item, index) in myList" :key="index" :index="index">
+            <img v-img-lazy="item.coverImgUrl" alt="image" />
+            <p class="desc">《{{ item.name }}》</p>
+            <div class="mask"></div>
+          </slide>
+        </carousel-3d>
+      </div>
 
-      <div class="userlist-title">我收藏的歌单</div>
-      <carousel-3d
-        v-if="starList.length > 0"
-        ref="carouselStar"
-        :count="starList.length"
-        :width="120"
-        :height="120"
-        :display="5"
-        controlsVisible="true"
-        :space="120"
-        :clickable="true"
-        :onMainSlideClick="() => gotoDetail(1)"
-      >
-        <slide v-for="(item, index) in starList" :key="index" :index="index">
-          <img v-img-lazy="item.coverImgUrl" alt="image" />
-          <p class="desc">《{{ item.name }}》</p>
-          <div class="mask"></div>
-        </slide>
-      </carousel-3d>
+      <div class="user-star" v-if="starList.length > 0">
+        <div class="userlist-title">我收藏的歌单</div>
+        <carousel-3d
+          ref="carouselStar"
+          :count="starList.length"
+          :width="120"
+          :height="120"
+          :display="5"
+          controlsVisible="true"
+          :space="120"
+          :clickable="true"
+          :onMainSlideClick="() => gotoDetail(1)"
+        >
+          <slide v-for="(item, index) in starList" :key="index" :index="index">
+            <img v-img-lazy="item.coverImgUrl" alt="image" />
+            <p class="desc">《{{ item.name }}》</p>
+            <div class="mask"></div>
+          </slide>
+        </carousel-3d>
+      </div>
     </template>
     <ElectroNoResult
       v-else-if="!isLoading && !uid"
@@ -157,8 +159,7 @@ const gotoDetail = (opt) => {
       width: 100%;
       text-align: center;
       cursor: default;
-      font-size: 10px;
-      height: 20px;
+      font-size: 12px;
       line-height: 12px;
     }
 
