@@ -159,12 +159,13 @@ const formatCount = (count) => {
           width: 50px;
           height: 50px;
           margin: -25px;
-          // transform: scale(0.9);
+          transform: scale(0.9);
           // transform: translate(-50%, -50%);
           background-image: -webkit-image-set(
             url("assets/img/icon_play.png") 1x,
             url("assets/img/icon_play100.png") 2x
           );
+          // background-image: url("assets/img/icon_play.png");
           opacity: 0;
           transition: all 0.5s;
         }

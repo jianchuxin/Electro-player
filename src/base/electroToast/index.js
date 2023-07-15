@@ -14,7 +14,7 @@ export class ToastCreator {
   }
 
   present() {
-    const electroToast = h(h(Toast), this.options);
+    const electroToast = h(Toast, this.options);
     render(electroToast, this.container);
     document.body.insertBefore(this.container, document.body.firstChild);
 

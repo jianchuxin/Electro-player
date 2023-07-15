@@ -154,13 +154,13 @@ const gotoDetail = (opt) => {
     }
     .desc {
       position: absolute;
-      bottom: -30px;
+      bottom: -48px;
       z-index: 1996;
       width: 100%;
       text-align: center;
       cursor: default;
       font-size: 12px;
-      line-height: 12px;
+      line-height: 14px;
     }
 
     .mask {

@@ -36,6 +36,7 @@ const deleteItem = (index) => {
   showToast({ message: "删除成功!" });
 };
 </script>
+
 <template>
   <div class="historyList">
     <MusicList

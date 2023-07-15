@@ -31,6 +31,7 @@ const initialData = async () => {
   const res = await getComent(route.params.id, page.value);
   hotComments.value = res.hotComments;
   commentList.value = res.comments;
+  // console.log(hotComments.value);
   total.value = res.total;
   hideLoad();
 };
@@ -43,6 +44,14 @@ const getAvatarUrl = (item) => {
 // 跳转用户链接地址
 const getUserLink = (item) => {
   return `https://music.163.com/#/user/home?id=${item.user.userId}`;
+};
+
+const getCommentDate = (item) => {
+  if (item.ipLocation.location != "") {
+    return `${item.timeStr}  来自${item.ipLocation.location}`;
+  } else {
+    return item.timeStr;
+  }
 };
 
 // 列表滚动事件
@@ -89,7 +98,7 @@ const pullUpLoad = async () => {
           }}</a>
         </h4>
         <div class="comment-item-date">
-          {{ item.timeStr }}&nbsp;&nbsp;来自{{ item.ipLocation.location }}
+          {{ getCommentDate(item) }}
         </div>
         <p class="comment-item-disc">
           {{ item.content }}
@@ -134,7 +143,7 @@ const pullUpLoad = async () => {
           }}</a>
         </h4>
         <div class="comment-item-date">
-          {{ item.timeStr }}&nbsp;&nbsp;来自{{ item.ipLocation.location }}
+          {{ getCommentDate(item) }}
         </div>
         <p class="comment-item-disc">
           {{ item.content }}

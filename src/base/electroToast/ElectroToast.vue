@@ -28,7 +28,7 @@ const positionClass = computed(() => {
 .@{prefix-cls} {
   position: fixed;
   left: 50%;
-  z-index: 1996;
+  z-index: 1998;
   max-width: 80%;
   box-sizing: border-box;
   border-radius: @border_radius;

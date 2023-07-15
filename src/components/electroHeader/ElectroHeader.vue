@@ -169,16 +169,19 @@ const getUserInfo = async (uid) => {
   .header {
     .flex-center;
     font-style: italic;
-    line-height: 60px;
-    font-size: 20px;
-    font-weight: 800;
-    color: transparent;
-    background: url("assets/slideImg/silver.jpg");
-    background-position: 100% 100%;
-    text-align: center;
-    background-clip: text;
-    -webkit-background-clip: text;
-    animation: slide-img 10s linear infinite alternate-reverse forwards;
+    a {
+      padding: 0 10px;
+      line-height: 60px;
+      font-size: 20px;
+      font-weight: 800;
+      color: transparent;
+      background: url("assets/slideImg/silver.jpg");
+      background-position: 30% 30%;
+      text-align: center;
+      background-clip: text;
+      -webkit-background-clip: text;
+      animation: slide-img 20s linear infinite alternate-reverse forwards;
+    }
 
     // media
     @media (max-width: 768px) {
@@ -255,10 +258,10 @@ const getUserInfo = async (uid) => {
 
 @keyframes slide-img {
   0% {
-    background-position: 0 50%;
+    background-position: 30% 30%;
   }
   100% {
-    background-position: 70% 75%;
+    background-position: 70% 70%;
   }
 }
 </style>

@@ -95,7 +95,7 @@ const picUrl = computed(() => {
     currentMusic.value.id && currentMusic.value.image
       ? `${currentMusic.value.image}?param=300y300`
       : getRandomUrl();
-  console.log(url);
+  // console.log(url);
   return url;
 });
 // 播放进度百分比
@@ -193,7 +193,6 @@ const progressMusicEnd = (percent) => {
 const modeChange = () => {
   const newMode = (mode.value + 1) % 4;
   setMode(newMode);
-  console.log(newMode);
   if (newMode === PLAY_MODE.ONE_LOOP) {
     return;
   }

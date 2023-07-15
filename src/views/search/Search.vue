@@ -74,7 +74,7 @@ const pullUpLoad = async () => {
 const selectItem = async (music) => {
   try {
     const res = await getSongDetail(music.id);
-    console.log(res);
+    // console.log(res);
     const picUrl = res.songs[0].al.picUrl;
     music.image = toHttps(picUrl);
     selectAddPlay(music);
