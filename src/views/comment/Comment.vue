@@ -5,6 +5,7 @@ import { useLoading } from "@/composables/loading";
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { watch } from "vue";
+import { toHttps } from "@/utils/util";
 
 const route = useRoute();
 const { isLoading, hideLoad } = useLoading();
@@ -38,7 +39,7 @@ const initialData = async () => {
 
 // 用户头像
 const getAvatarUrl = (item) => {
-  return `${item.user.avatarUrl}?param=50y50`;
+  return `${toHttps(item.user.avatarUrl)}?param=50y50`;
 };
 
 // 跳转用户链接地址
