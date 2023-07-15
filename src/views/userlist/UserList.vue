@@ -9,6 +9,7 @@ import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import { useLoading } from "@/composables/loading";
+import { toHttps } from "@/utils/util";
 
 const userStore = useUserStore();
 const { uid } = storeToRefs(userStore);
@@ -45,6 +46,7 @@ const initialData = async () => {
   const res = await getUserPlayList(uid.value);
   const list = res.playlist;
   list.forEach((item) => {
+    item.coverImgUrl = toHttps(item.coverImgUrl);
     if (item.creator.userId === Number(uid.value)) {
       myList.value.push(item);
     } else {
