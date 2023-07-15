@@ -141,7 +141,6 @@ watch(currentMusic, (newMusic, oldMusic) => {
   // 重置相关参数
   lyricIndex.value = currentTime.value = currentProgress.value = 0;
   silencePromise(audioEle.value.play());
-  // nextTick??***********
   getMusicLyric(newMusic.id);
 });
 // 播放 or 暂停
@@ -155,7 +154,7 @@ watch(isPlaying, (newPlaying) => {
 
 // 歌词滚动
 watch(currentTime, (newTime, oldTime) => {
-  if (nolyric.value) {
+  if (nolyric.value || lyric.value.length === 0) {
     return;
   }
   let start = 0;
@@ -352,6 +351,7 @@ const getMusicLyric = async (id) => {
   } else {
     nolyric.value = true;
   }
+  silencePromise(audioEle.value.play());
 };
 </script>
 
