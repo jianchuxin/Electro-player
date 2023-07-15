@@ -505,7 +505,7 @@ const getMusicLyric = async (id) => {
     .music-right {
       position: relative;
       width: 310px;
-      margin: left 10px;
+      margin-left: 10px;
       .close-lyric {
         position: absolute;
         top: 0;
