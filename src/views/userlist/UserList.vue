@@ -83,7 +83,7 @@ const gotoDetail = (opt) => {
           :height="120"
           :display="5"
           controlsVisible="true"
-          :space="120"
+          :space="100"
           :clickable="true"
           :onMainSlideClick="() => gotoDetail(0)"
         >
@@ -104,7 +104,7 @@ const gotoDetail = (opt) => {
           :height="120"
           :display="5"
           controlsVisible="true"
-          :space="120"
+          :space="100"
           :clickable="true"
           :onMainSlideClick="() => gotoDetail(1)"
         >
@@ -129,7 +129,7 @@ const gotoDetail = (opt) => {
   flex-direction: column;
 }
 .userlist-title {
-  margin: 20px 0;
+  margin-bottom: 20px;
   width: 100%;
   height: 34px;
   // text-align: center;
@@ -156,7 +156,8 @@ const gotoDetail = (opt) => {
     }
     .desc {
       position: absolute;
-      bottom: -48px;
+      // bottom: -48px;
+      margin-top: 10px;
       z-index: 1996;
       width: 100%;
       text-align: center;
@@ -172,15 +173,15 @@ const gotoDetail = (opt) => {
       right: 0;
       bottom: 0;
       border-radius: 10px;
-      background-color: rgba(0, 0, 0, 0.5);
+      background-color: rgba(0, 0, 0, 0.3);
     }
 
     &.current {
       img {
-        box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
       }
       .mask {
-        background-color: rgba(0, 0, 0, 0.15);
+        background-color: rgba(0, 0, 0, 0.1);
       }
     }
 
