@@ -15,7 +15,7 @@ import {
   randomSortArray,
   parseLyric,
 } from "@/utils/util";
-import { PLAY_MODE } from "@/config";
+import { PLAY_MODE, ELECTROPLAYER_CONFIG } from "@/config";
 import { showToast } from "base/electroToast/index";
 import { getLyric } from "apis/musiclist";
 
@@ -83,19 +83,12 @@ onMounted(() => {
   initKeyDown();
 });
 
-// 从初始的三张背景图中导入一张
-const getRandomUrl = () => {
-  const num = Math.floor(Math.random() * 3) + 1;
-  return new URL(`../assets/background/bg-${num}.jpg`, import.meta.url);
-};
-
 // 歌曲封面图片300X300
 const picUrl = computed(() => {
   const url =
     currentMusic.value.id && currentMusic.value.image
       ? `${currentMusic.value.image}?param=300y300`
-      : getRandomUrl();
-  // console.log(url);
+      : ELECTROPLAYER_CONFIG.BACKGROUND;
   return url;
 });
 // 播放进度百分比
