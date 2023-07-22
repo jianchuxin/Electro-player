@@ -3,7 +3,7 @@ import ElectroLoading from "@/base/electroLoading/ElectroLoading.vue";
 import { getComent } from "@/apis/musiclist";
 import { useLoading } from "@/composables/loading";
 import { ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { onBeforeRouteUpdate, useRoute } from "vue-router";
 import { watch } from "vue";
 import { toHttps } from "@/utils/util";
 
@@ -17,6 +17,8 @@ const page = ref(0); // 评论分页
 const total = ref(null); // 评论总数
 const lockUp = ref(true); // 是否锁定滚动加载事件，默认锁定
 
+const list = ref(null);
+
 // 初始化 or 滚动加载完成后解除锁定
 watch(commentList, (newList, oldList) => {
   if (newList.length !== oldList.length) {
@@ -25,11 +27,19 @@ watch(commentList, (newList, oldList) => {
 });
 
 onMounted(() => {
-  initialData();
+  initialData(route.params.id);
 });
 
-const initialData = async () => {
-  const res = await getComent(route.params.id, page.value);
+// 路由守卫
+onBeforeRouteUpdate((to) => {
+  isLoading.value = true;
+  page.value = 0;
+  list.value.scrollTop = 0;
+  initialData(to.params.id);
+});
+
+const initialData = async (id) => {
+  const res = await getComent(id, page.value);
   hotComments.value = res.hotComments;
   commentList.value = res.comments;
   // console.log(hotComments.value);
@@ -76,7 +86,7 @@ const pullUpLoad = async () => {
 </script>
 
 <template>
-  <div class="comment" @scroll="listScroll">
+  <div class="comment" @scroll="listScroll" ref="list">
     <ElectroLoading :show="isLoading" />
     <dl v-if="hotComments.length > 0" class="comment-list">
       <!-- 精彩评论 -->
