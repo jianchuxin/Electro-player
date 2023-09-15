@@ -1,18 +1,17 @@
 <script setup>
 import ElectroDialog from "base/electroDialog/ElectroDialog.vue";
 import { useUserStore } from "@/stores/user";
-import { getUserPlayList } from "apis/userinfo";
+import { getUserDetails } from "apis/userinfo";
 import { storeToRefs } from "pinia";
 import { ref, computed, onMounted } from "vue";
 import { showToast } from "base/electroToast/index";
 import { toHttps } from "@/utils/util";
 
 const userStore = useUserStore();
-const { uid, avatarUrl } = storeToRefs(userStore);
-const { setUid, setAvatarUrl } = userStore;
+const { uid, avatarUrl, nickname } = storeToRefs(userStore);
+const { setUid, setAvatarUrl, setNickname } = userStore;
 
 const uidValue = ref("");
-const userInfo = ref({});
 // 弹窗模板引用
 const loginDialog = ref(null);
 const helpDialog = ref(null);
@@ -54,23 +53,25 @@ const login = () => {
 const logout = () => {
     setUid("");
     setAvatarUrl("");
+    setNickname("");
     uidValue.value = "";
     showToast({ message: "退出成功!", position: "top" });
 };
 
 const getUserInfo = async (uid) => {
-    const res = await getUserPlayList(uid);
-    const { playlist } = res;
-    if (playlist.length === 0 || !playlist[0].creator) {
+    const userDetails = await getUserDetails(uid);
+    const { profile } = userDetails;
+    if (profile === undefined) {
         showToast({ message: `未找到 UID 为 ${uid} 的用户信息`, position: "top" });
         return;
     }
-    userInfo.value = playlist[0].creator;
+    const { avatarUrl, nickname } = profile;
     setUid(uid);
-    setAvatarUrl(toHttps(userInfo.value.avatarUrl));
+    setAvatarUrl(toHttps(avatarUrl));
+    setNickname(nickname);
     setTimeout(() => {
         showToast({
-            message: `${userInfo.value.nickname} 欢迎使用 Electro Player`,
+            message: `${nickname} 欢迎使用 Electro Player`,
             position: "top",
         });
     }, 200);
@@ -88,7 +89,7 @@ const getUserInfo = async (uid) => {
                 <RouterLink to="/music/userlist" custom v-slot="{ navigate }">
                     <dt @click="navigate" class="user-info" role="link">
                         <img :src="avatarUrl" class="avatar" alt="img" />
-                        <span class="user-name">{{ userInfo.nickname }}</span>
+                        <span class="user-name">{{ nickname }}</span>
                     </dt>
                 </RouterLink>
                 <dd class="user-btn" @click="opendialog('logout')">退出</dd>

@@ -11,6 +11,7 @@ export const useUserStore = defineStore(
         const volume = ref(ELECTROPLAYER_CONFIG.VOLUME);
         const HISTORYLIST_MAX_LENGTH = 200;
         const avatarUrl = ref("");
+        const nickname = ref("");
         // 设置登录用户uid
         const setUid = (u) => {
             uid.value = u;
@@ -27,6 +28,11 @@ export const useUserStore = defineStore(
         // 设置用户头像
         const setAvatarUrl = (newUrl) => {
             avatarUrl.value = newUrl;
+        };
+
+        // 设置网名
+        const setNickname = (newName) => {
+            nickname.value = newName;
         };
 
         // 添加音乐
@@ -70,11 +76,13 @@ export const useUserStore = defineStore(
             setVolume,
             avatarUrl,
             setAvatarUrl,
+            nickname,
+            setNickname,
         };
     },
     {
         persist: {
-            paths: ["uid", "historyList", "volume", "avatarUrl"],
+            paths: ["uid", "historyList", "volume", "avatarUrl", "nickname"],
         },
     }
 );
